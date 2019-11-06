@@ -17,5 +17,4 @@ lib64
 .DS_Store
 .idea
 *.DS_Store
-*hullin.json
 *~

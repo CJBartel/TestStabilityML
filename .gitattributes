@@ -1,0 +1,2 @@
+*hullin.json filter=lfs diff=lfs merge=lfs -text
+mlstabilitytest/data/hullin.json filter=lfs diff=lfs merge=lfs -text

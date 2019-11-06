@@ -269,7 +269,7 @@ class StabilityAnalysis(object):
         print('Writing to %s.' % fjson)
         print('Time elapsed = %.0f s.' % (end-start))
     
-        return write_json(results, fjson)   
+        return write_json(results, fjson)  
     
     def results_summary(self):
         
@@ -282,20 +282,19 @@ class StabilityAnalysis(object):
         Ed_MAE = results['stats']['Ed']['reg']['abs']['mean']
         
         tp, fp, tn, fn = [results['stats']['Ed']['cl']['0']['raw'][num] for num in ['tp', 'fp', 'tn', 'fn']]
-        prec, recall, acc, f1 = [results['stats']['Ed']['cl']['0']['scores'][score] for score in ['prec', 'recall', 'acc', 'f1']]
+        prec, recall, acc, f1 = [results['stats']['Ed']['cl']['0']['scores'][score] for score in ['precision', 'recall', 'accuracy', 'f1']]
         
         print('\nMAE on formation enthalpy = %.3f eV/atom' % Ef_MAE)
         print('MAE on decomposition enthalpy = %.3f eV/atom' % Ed_MAE)
         
-        print('\nClassifying stability:')
+        print('\nClassifying stable or unstable:')
         print('Precision = %.3f' % prec)
         print('Recall = %.3f' % recall)
         print('Accuracy = %.3f' % acc)
         print('F1 = %.3f' % f1)
         
         print('\nConfusion matrix:')
-        print('TP | FP |\nTN | FN = \n%i | %i |\n%i | %i' % (tp, fp, tn, fn))
+        print('TP    |    FP\nTN    |    FN = \n%i    |    %i\n%i    |    %i' % (tp, fp, tn, fn))
         
         end = time()
-        print('\nTime elapsed = %.2f s' % (end-start))
-        
+        print('\nTime elapsed = %i s' % (end-start))

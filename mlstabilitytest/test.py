@@ -16,7 +16,7 @@ def npj16_LiMnTMO():
     Takes ~60 s on 7 cores
     """
     
-    data_dir = os.path.join(example_dir, 'data', 'LiMnTMO', 'npj16')
+    data_dir = os.path.join(example_dir, 'examples', 'LiMnTMO', 'npj16')
     data_file = 'ml_input.json'
     experiment = 'LiMnTMO'
     nprocs = 'all'
@@ -24,7 +24,7 @@ def npj16_LiMnTMO():
                             data_file, 
                             experiment,
                             nprocs)
-    return obj.results()
+    return obj.results_summary()
 
 def npj16_allMP():
     """
@@ -41,7 +41,7 @@ def npj16_allMP():
     return obj.results()    
     
 def main():
-    return npj16_allMP()
+    return npj16_LiMnTMO()
 
 if __name__ == '__main__':
     d = main()

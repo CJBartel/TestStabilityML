@@ -122,5 +122,5 @@ class StabilityStats(object):
     @property
     def classification_stats(self): 
         threshs = self.stability_thresholds
-        return {thresh : {'raw' : self.confusion(thresh),
+        return {str(thresh) : {'raw' : self.confusion(thresh),
                           'scores' : self.classification_scores(thresh)} for thresh in threshs}

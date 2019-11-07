@@ -270,7 +270,8 @@ class StabilityAnalysis(object):
         print('Time elapsed = %.0f s.' % (end-start))
     
         return write_json(results, fjson)  
-    
+
+    @property
     def results_summary(self):
         
         results = self.results(False)
@@ -294,7 +295,7 @@ class StabilityAnalysis(object):
         print('F1 = %.3f' % f1)
         
         print('\nConfusion matrix:')
-        print('TP | FP\nTN | FN = \n%i | %i\n%i | %i' % (tp, fp, tn, fn))
+        print('TP | FP\nFN | TN = \n%i | %i\n%i | %i' % (tp, fp, fn, tn))
         
         end = time()
         print('\nTime elapsed = %i s' % (end-start))

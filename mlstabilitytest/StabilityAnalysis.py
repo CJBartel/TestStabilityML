@@ -73,7 +73,7 @@ class StabilityAnalysis(object):
     def __init__(self, 
                  data_dir, 
                  data_file, 
-                 experiment='all',
+                 experiment='allMP',
                  nprocs='all'):
         """
         converts input data to convenient format
@@ -96,7 +96,7 @@ class StabilityAnalysis(object):
         input_data = {CompAnalyzer(k).std_formula() : {'Ef' : float(input_data[k])}
                         for k in input_data}
         
-        if experiment == 'all':
+        if experiment == 'allMP':
             mp = Ef()
         elif experiment == 'LiMnTMO':
             mp = mp_LiMnTMO()
@@ -294,7 +294,7 @@ class StabilityAnalysis(object):
         print('F1 = %.3f' % f1)
         
         print('\nConfusion matrix:')
-        print('TP    |    FP\nTN    |    FN = \n%i    |    %i\n%i    |    %i' % (tp, fp, tn, fn))
+        print('TP | FP\nTN | FN = \n%i | %i\n%i | %i' % (tp, fp, tn, fn))
         
         end = time()
         print('\nTime elapsed = %i s' % (end-start))

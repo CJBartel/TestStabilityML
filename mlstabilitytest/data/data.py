@@ -30,3 +30,7 @@ def hullout():
 def mp_LiMnTMO():
     fjson = os.path.join(this_dir, "data", "mp_LiMnTMO.json")
     return read_json(fjson)
+
+def smact_LiMnTMO():
+    fjson = os.path.join(this_dir, "data", "smact_LiMnTMO.json")
+    return read_json(fjson)

@@ -10,11 +10,10 @@ import os
 from compmatscipy.handy_functions import read_json, write_json
 from compmatscipy.CompAnalyzer import CompAnalyzer
 from compmatscipy.HullAnalysis import AnalyzeHull
-from mlstabilitytest.data.data import Ef, mp_LiMnTMO, hullin, hullout, spaces
+from mlstabilitytest.data.data import Ef, mp_LiMnTMO, smact_LiMnTMO, hullin, hullout, spaces
 from mlstabilitytest.StabilitySummary import StabilitySummary
 import multiprocessing as multip
 from time import time
-
 
 def _update_hullin_space(ml, mp_hullin, space):
     """
@@ -57,8 +56,45 @@ def _assess_stability(hullin, spaces, compound):
          'Ed' : decomposition energy per atom (float),
          'rxn' : decomposition reaction (str)}
     """
-    
     return AnalyzeHull(hullin, spaces[compound]).cmpd_hull_output_data(compound)
+
+def _get_smact_hull_space(compound, mp_spaces):
+    """
+    TO-DO
+    """
+    els = set(CompAnalyzer(compound).els)
+    for s in mp_spaces:
+        space_els = set(s.split('_'))
+        if (len(els.intersection(space_els)) == 4) and (len(space_els) < 7):
+            return s
+        
+        
+def _update_smact_space(ml,  mp_hullin, space):
+    """
+    TO-DO
+    """
+    ml_space = mp_hullin[space]
+    for compound in ml_space:
+        if (CompAnalyzer(compound).num_els_in_formula == 1) or (compound not in ml):
+            continue
+        else:
+            ml_space[compound]['E'] = ml[compound]['Ef']
+
+    for compound in ml:
+        if set(CompAnalyzer(compound).els).issubset(set(space.split('_'))):
+            ml_space[compound] = {'E' : ml[compound]['Ef'],
+                                  'amts' : {el : CompAnalyzer(compound).amt_of_el(el)
+                                   for el in space.split('_')}}
+
+    return ml_space
+        
+def _get_stable_compounds(hullin, space):
+    """
+    TO-DO
+    """
+    return AnalyzeHull(hullin, space).stable_compounds
+
+
 
 class StabilityAnalysis(object):
     """
@@ -98,21 +134,25 @@ class StabilityAnalysis(object):
         
         if experiment == 'allMP':
             mp = Ef()
+            compounds = list(mp.keys())
         elif experiment == 'LiMnTMO':
             mp = mp_LiMnTMO()
+            compounds = list(mp.keys())
+        elif experiment == 'smact':
+            mp = mp_LiMnTMO()
+            smact = smact_LiMnTMO()
+            compounds = list(set(list(mp.keys()) + smact['smact']))
         else:
             raise NotImplementedError
-            
-        mp_compounds = list(mp.keys())
-        
-        if set(mp_compounds).intersection(set(list(input_data.keys()))) != set(mp_compounds):
+                    
+        if set(compounds).intersection(set(list(input_data.keys()))) != set(compounds):
             print('ML dataset does not include all MP formulas!')
             print('Cannot perform analysis.')
             raise AssertionError
             
-        input_data = {c : input_data[c] for c in mp_compounds}
+        input_data = {c : input_data[c] for c in compounds}
             
-        self.compounds = mp_compounds
+        self.compounds = compounds
         
         self.input_data = input_data
         
@@ -132,6 +172,10 @@ class StabilityAnalysis(object):
         """
         generates input file for stability analysis using ML data
         
+        Note on computational expense:
+        -for experiment='allMP', requires ~5 min on 27 processors
+        -for experiment='LiMnTMO', requires ~30 s on 7 processors
+
         Args:
             remake (bool) - repeat generation of file if True; else read file
             
@@ -151,10 +195,11 @@ class StabilityAnalysis(object):
         if not remake and os.path.exists(fjson):
             print('\nReading existing stability input file: %s.' % fjson)
             return read_json(fjson)
-        
-        print('\nGenerating stability input file on %i processors...' % self.nprocs)
+
+        nprocs = self.nprocs
+        print('\nGenerating stability input file on %i processors...' % nprocs)
         start = time()
-        
+
         compounds = self.compounds
                 
         mp_hullin = hullin()
@@ -165,7 +210,7 @@ class StabilityAnalysis(object):
     
         ml = self.input_data
         
-        pool = multip.Pool(processes=self.nprocs)
+        pool = multip.Pool(processes=nprocs)
         
         ml_spaces = pool.starmap(_update_hullin_space, 
                               [(ml, mp_hullin, space) 
@@ -182,6 +227,10 @@ class StabilityAnalysis(object):
     def ml_hullout(self, remake=False):
         """
         generates output file with stability analysis using ML data
+
+        Note on computational expense:
+        -for experiment='allMP', requires ~10 min on 27 processors
+        -for experiment='LiMnTMO', requires ~30 s on 7 processors
         
         Args:
             remake (bool) - repeat generation of file if True; else read file
@@ -203,15 +252,15 @@ class StabilityAnalysis(object):
             return read_json(fjson)
         
         ml_hullin = self.ml_hullin(False)
-
-        print('\nGenerating stability output file on %i processors...' % self.nprocs)
+        nprocs = self.nprocs
+        print('\nGenerating stability output file on %i processors...' % nprocs)
         start = time()
-        
+
         compounds = self.compounds  
         
         hull_spaces = spaces()
         
-        pool = multip.Pool(processes=self.nprocs)
+        pool = multip.Pool(processes=nprocs)
 
         
         stabilities = pool.starmap(_assess_stability,
@@ -273,6 +322,9 @@ class StabilityAnalysis(object):
 
     @property
     def results_summary(self):
+        """
+        TO-DO
+        """
         
         results = self.results(False)
         
@@ -284,6 +336,7 @@ class StabilityAnalysis(object):
         
         tp, fp, tn, fn = [results['stats']['Ed']['cl']['0']['raw'][num] for num in ['tp', 'fp', 'tn', 'fn']]
         prec, recall, acc, f1 = [results['stats']['Ed']['cl']['0']['scores'][score] for score in ['precision', 'recall', 'accuracy', 'f1']]
+        fpr = fp/(fp+tn)
         
         print('\nMAE on formation enthalpy = %.3f eV/atom' % Ef_MAE)
         print('MAE on decomposition enthalpy = %.3f eV/atom' % Ed_MAE)
@@ -293,9 +346,92 @@ class StabilityAnalysis(object):
         print('Recall = %.3f' % recall)
         print('Accuracy = %.3f' % acc)
         print('F1 = %.3f' % f1)
+        print('FPR = %.3f' % fpr)
         
         print('\nConfusion matrix:')
         print('TP | FP\nFN | TN = \n%i | %i\n%i | %i' % (tp, fp, fn, tn))
         
         end = time()
         print('\nTime elapsed = %i s' % (end-start))
+        
+    def smact_results(self, remake=False):
+        """
+        TO-DO
+        """
+        fjson = os.path.join(self.data_dir, 'ml_results.json')
+        if not remake and os.path.exists(fjson):
+            print('\nReading existing smact results from: %s.' % fjson)
+            return read_json(fjson)
+        
+        nprocs = self.nprocs
+        print('Analyzing SMACT compounds on %i processors...' % nprocs)
+        
+        start = time()
+        mp_spaces = spaces()
+        mp_spaces = list(set(list(mp_spaces.values())))
+        mp_hullin = hullin()
+        compounds = self.compounds
+        ml = self.input_data
+        
+        pool = multip.Pool(processes=nprocs)
+        
+        relevant_spaces = pool.starmap(_get_smact_hull_space,
+                                   [(compound, mp_spaces) for compound in compounds])
+        smallest_spaces = dict(zip(compounds, relevant_spaces))
+        relevant_spaces = list(set(relevant_spaces))
+        
+        end1 = time()
+        print('Got %i relevant chemical spaces in %i s' % (len(relevant_spaces), end1-start))
+        
+        ml_spaces = pool.starmap(_update_smact_space,
+                                 [(ml, mp_hullin, space)
+                                 for space in relevant_spaces])
+        ml_hullin = dict(zip(relevant_spaces, ml_spaces))
+        
+        end2 = time()
+        print('Updated hullin in %i s' % (end2-end1))
+        
+        stable_compounds = pool.starmap(_get_stable_compounds,
+                                    [(ml_hullin, space) for space in relevant_spaces])
+        
+        stable_compounds = list(set([j for i in stable_compounds for j in i]))
+        end3 = time()
+        print('Assessed stability in %i s' % (end3-end2))
+
+        mp_hullout = hullout()
+        mp_LiMnTMO_stable = [c for c in mp_hullout 
+                             if c in compounds if mp_hullout[c]['stability']]
+        
+        pred_LiMnTMO_stable = [c for c in compounds if c in stable_compounds]
+
+        results = {'compounds' : compounds,
+                   'MP_stable' : mp_LiMnTMO_stable,
+                   'pred_stable' : pred_LiMnTMO_stable}
+        end = time()
+        print('Time elapsed = %i s' % (end-start))
+        return write_json(results, fjson)
+
+    @property
+    def smact_summary(self):
+        results = self.smact_results(False)
+        compounds, mp_LiMnTMO_stable, pred_LiMnTMO_stable = [results[k] for k in ['compounds', 'MP_stable', 'pred_stable']]
+        
+        print('%i compounds investigated' % len(compounds))
+        print('%i are stable in MP' % len(mp_LiMnTMO_stable))
+        print('%i (%.2f) are predicted to be stable' % (len(pred_LiMnTMO_stable), len(pred_LiMnTMO_stable)/len(compounds)))
+        print('%i of those are stable in MP' % (len([c for c in pred_LiMnTMO_stable if c in mp_LiMnTMO_stable])))
+
+
+    @property
+    def Ed_results(self):
+
+        ml = self.input_data
+        mp_hullout = hullout()
+
+        ml = {compound : {'Ed' : ml[compound]['Ef']} for compound in ml}
+
+        obj = StabilitySummary(mp_hullout, ml)
+
+        stats = obj.stats_Ed
+
+        print(stats)

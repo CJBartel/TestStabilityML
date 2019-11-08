@@ -28,9 +28,9 @@ def npj16_LiMnTMO():
 
 def npj16_allMP():
     """
-    Takes ~??? s on 7 cores
+    Takes ~15 min on 27 cores
     """
-    data_dir = os.path.join(example_dir, 'data', 'allMP', 'npj16')
+    data_dir = os.path.join(example_dir, 'examples', 'allMP', 'npj16')
     data_file = 'ml_input.json'
     experiment = 'all'
     nprocs = 'all'
@@ -39,9 +39,24 @@ def npj16_allMP():
                             experiment,
                             nprocs)
     return obj.results()    
+
+def npj_smact():
+    """
+    Takes ~ s on 7 cores
+    """
+    data_dir = os.path.join(example_dir, 'examples', 'smact', 'npj16')
+    data_file = 'ml_input.json'
+    experiment = 'smact'
+    nprocs = 'all'
+    obj = StabilityAnalysis(data_dir,
+                            data_file,
+                            experiment,
+                            nprocs)
+    
+    return obj.smact_results
     
 def main():
-    return npj16_LiMnTMO()
+    return npj_smact()
 
 if __name__ == '__main__':
     d = main()

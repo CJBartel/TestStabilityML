@@ -17,6 +17,53 @@ from prettytable import PrettyTable
 
 this_dir, this_filename = os.path.split(__file__)
 FIG_DIR = os.path.join(this_dir, 'figures')
+
+def main():
+    set_rc_params()    
+    remake_fig1 = False
+    remake_fig2 = False
+    remake_fig3 = False
+    remake_fig4 = False
+    remake_fig5 = False
+    remake_table1 = False
+    remake_fig6 = False
+    remake_fig7 = False
+    remake_figS1 = False
+    remake_figS2 = False
+    remake_figS3 = False
+    remake_figS4 = False
+    remake_tableS1 = False
+    
+    if remake_fig1:
+        make_fig1()
+    if remake_fig2:
+        make_fig2('allMP')
+    if remake_fig3:
+        make_fig3('Ef')
+    if remake_fig4:
+        make_fig4('Ef')
+    if remake_fig5:
+        make_fig5('Ef')
+    if remake_fig6:
+        make_fig5('Ed')
+    if remake_fig7:
+        make_fig7()
+    if remake_figS1:
+        make_figS1()
+    if remake_figS2:
+        make_fig2('LiMnTMO')
+    if remake_figS3:
+        make_fig3('Ed')
+        print('!!!!!!\nroost data placeholder for auto\n!!!!!')
+    if remake_figS4:
+        make_fig4('Ed')
+        print('!!!!!!\nroost data placeholder for auto\n!!!!!')
+    if remake_table1:
+        make_table1('Ef')
+    if remake_tableS1:
+        make_table1('Ed')
+    return
+
 def get_results(training_prop, experiment, model):
     return read_json(os.path.join(this_dir, 
                                   'ml_data', 
@@ -964,52 +1011,6 @@ def make_table1(training_prop):
     name = 'Table1' if training_prop == 'Ef' else 'TableS1'
     with open(os.path.join(FIG_DIR, name), 'w') as f:
         f.write(str(x))
-    
-def main():
-    set_rc_params()    
-    remake_fig1 = True
-    remake_fig2 = True
-    remake_fig3 = True
-    remake_fig4 = True
-    remake_fig5 = True
-    remake_table1 = True
-    remake_fig6 = True
-    remake_fig7 = True
-    remake_figS1 = True
-    remake_figS2 = True
-    remake_figS3 = True
-    remake_figS4 = True
-    remake_tableS1 = True
-    
-    if remake_fig1:
-        make_fig1()
-    if remake_fig2:
-        make_fig2('allMP')
-    if remake_fig3:
-        make_fig3('Ef')
-    if remake_fig4:
-        make_fig4('Ef')
-    if remake_fig5:
-        make_fig5('Ef')
-    if remake_fig6:
-        make_fig5('Ed')
-    if remake_fig7:
-        make_fig7()
-    if remake_figS1:
-        make_figS1()
-    if remake_figS2:
-        make_fig2('LiMnTMO')
-    if remake_figS3:
-        make_fig3('Ed')
-        print('!!!!!!\nroost data placeholder for auto\n!!!!!')
-    if remake_figS4:
-        make_fig4('Ed')
-        print('!!!!!!\nroost data placeholder for auto\n!!!!!')
-    if remake_table1:
-        make_table1('Ef')
-    if remake_tableS1:
-        make_table1('Ed')
-    return
-
+        
 if __name__ == '__main__':
     main()

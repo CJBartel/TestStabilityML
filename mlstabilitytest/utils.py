@@ -662,13 +662,34 @@ class EdAnalysis(object):
         print('%i of those are stable in MP' % (len([c for c in pred_LiMnTMO_stable if c in mp_LiMnTMO_stable])))
 
 def _make_binary_labels(data, thresh):
+    """
+    Args:
+        data (list) - list of floats
+        thresh (float) - value to partition on 
+    
+    Returns:
+        1 if value <= thresh else 0 for value in list
+    """
     return [1 if v <= thresh else 0 for v in data]
 
 class StabilityStats(object):
+    """
+    Perform statistical analysis on stability results
+    """
     
     def __init__(self, actual, pred, 
                  percentiles=[1, 10, 25, 50, 75, 90, 99],
                  stability_thresholds=[0]):
+        """
+        Args:
+            actual (list) - list of actual values (float) for some property
+            pred (list) - list of predicted values (float) for some property
+            percentiles (list) - list of percentiles (int) to obtain
+            stability_thresholds (list) - list of thresholds (float) on which to classify as stable (below threshold) or unstable (above threshold)
+        
+        Returns:
+            checks that actual and predicted lists are same length
+        """
         if len(actual) != len(pred):
             raise ValueError
         self.actual = actual
@@ -678,57 +699,93 @@ class StabilityStats(object):
 
     @property
     def errors(self):
+        """
+        list of actual minus predicted
+        """
         a, p = self.actual, self.pred
         return [a[i] - p[i] for i in range(len(a))]
     
     @property
     def abs_errors(self):
+        """
+        list of absolute value of actual minus predicted
+        """
         errors = self.errors
         return [abs(e) for e in errors]
 
     @property
     def sq_errors(self):
+        """
+        list of (actual minus predicted) squared
+        """
         errors = self.errors
         return [e**2 for e in errors]
     
     @property
     def mean_error(self):
+        """
+        mean error
+        """
         return np.mean(self.errors)
     
     @property
     def mean_abs_error(self):
+        """
+        mean absolute error
+        """
         return np.mean(self.abs_errors)
     
     @property
     def root_mean_sq_error(self):
+        """
+        root mean squared error
+        """
         return np.sqrt(np.mean(self.sq_errors))
     
     @property
     def median_error(self):
+        """
+        median error
+        """
         return np.median(self.errors)
     
     @property
     def median_abs_error(self):
+        """
+        median absolute error
+        """
         return np.median(self.abs_errors)
     
     @property
     def r2(self):
+        """
+        correlation coefficient squared
+        """
         return r2_score(self.actual, self.pred)
     
     @property
     def per_errors(self):
+        """
+        percentile errors (dict) {percentile : e such that percentile % of errors are < e}
+        """
         percentiles = self.percentiles
         errors = self.errors
         return {int(percentiles[i]) : np.percentile(errors, percentiles)[i] for i in range(len(percentiles))}
 
     @property
     def per_abs_errors(self):
+        """
+        percentile absolute errors (dict) {percentile : |e| such that percentile % of |errors| are < |e|}
+        """
         percentiles = self.percentiles
         errors = self.abs_errors
         return {int(percentiles[i]) : np.percentile(errors, percentiles)[i] for i in range(len(percentiles))}
         
     @property
     def regression_stats(self):
+        """
+        summary of stats
+        """
         return {'abs' : {'mean' : self.mean_abs_error,
                          'median' : self.median_abs_error,
                          'per' : self.per_abs_errors},
@@ -739,6 +796,13 @@ class StabilityStats(object):
                 'r2' : self.r2}
                 
     def confusion(self, thresh):
+        """
+        Args:
+            thresh (float) - threshold for stability (eV/atom)
+        
+        Returns:
+            confusion matrix as dictionary
+        """
         actual = _make_binary_labels(self.actual, thresh)
         pred = _make_binary_labels(self.pred, thresh)
         cm = confusion_matrix(actual, pred).ravel()
@@ -746,6 +810,13 @@ class StabilityStats(object):
         return dict(zip(labels, [int(v) for v in cm])) 
     
     def classification_scores(self, thresh):
+        """
+        Args:
+            thresh (float) - threshold for stability (eV/atom)
+        
+        Returns:
+            classification stats as dict
+        """        
         confusion = self.confusion(thresh)
         tn, fp, fn, tp = [confusion[stat] for stat in ['tn', 'fp', 'fn', 'tp']]
         if tp+fp == 0:
@@ -773,21 +844,38 @@ class StabilityStats(object):
     
     @property
     def classification_stats(self): 
+        """
+        summary of classification stats
+        """
         threshs = self.stability_thresholds
         return {str(thresh) : {'raw' : self.confusion(thresh),
-                              'scores' : self.classification_scores(thresh)} for thresh in threshs}
+                               'scores' : self.classification_scores(thresh)} for thresh in threshs}
 
 class StabilitySummary(object):
+    """
+    Summarize stability performance stats
+    """
     
     def __init__(self, 
                  mp, 
                  ml):
+        """
+        Args:
+            mp (dict) - dictionary of MP hull output data
+            ml (dict) - dictionary of ML hull output data
+        
+        Returns:
+            mp, ml
+        """
         
         self.mp = mp
         self.ml = ml
     
     @property
     def Ef(self):
+        """
+        put actual and predicted formation energies in dict
+        """
         mp = self.mp
         ml = self.ml
         formulas = sorted(list(mp.keys()))
@@ -796,12 +884,18 @@ class StabilitySummary(object):
         
     @property
     def stats_Ef(self):
+        """
+        get stats on predicting formation energy
+        """
         Ef = self.Ef
         actual, pred = Ef['actual'], Ef['pred']
         return StabilityStats(actual, pred).regression_stats
     
     @property
     def Ed(self):
+        """
+        put actual and predicted decomposition energies in dict
+        """
         mp = self.mp
         ml = self.ml
         formulas = sorted(list(mp.keys()))
@@ -810,6 +904,9 @@ class StabilitySummary(object):
         
     @property
     def stats_Ed(self):
+        """
+        get stats on predicting decomposition energy
+        """
         Ed = self.Ed
         actual, pred = Ed['actual'], Ed['pred']
         reg = StabilityStats(actual, pred).regression_stats
@@ -819,6 +916,9 @@ class StabilitySummary(object):
 
     @property
     def rxns(self):
+        """
+        get decomposition reactions
+        """
         mp = self.mp
         ml = self.ml
         formulas = sorted(list(mp.keys()))
@@ -827,12 +927,8 @@ class StabilitySummary(object):
 
     @property
     def formulas(self):
+        """
+        get compounds considered
+        """
         mp = self.mp
         return sorted(list(mp.keys()))
-        
-def main():
-    return
-
-if __name__ == '__main__':
-    main()
-    

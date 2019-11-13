@@ -8,29 +8,66 @@ Created on Wed Nov  6 11:00:21 2019
 
 import os
 from compmatscipy.handy_functions import read_json
+import tarfile
 
 this_dir, this_filename = os.path.split(__file__)
 
 def spaces():
+    """
+    {compound (str) : chemical space containing compound that is easy to eval (str)
+        for compound in MP}
+    """
     fjson = os.path.join(this_dir, "data", "spaces.json")
     return read_json(fjson)
 
 def Ef():
+    """
+    {compound (str) : {'ID' : MP ID for ground-state structure (str),
+                       'Ef' : formation energy (float, eV/atom)}
+        for compound in MP}
+    """
     fjson = os.path.join(this_dir, "data", "Ef.json")
     return read_json(fjson)
 
 def hullin():
-    fjson = os.path.join(this_dir, "data", "hullin.json")
-    return read_json(fjson)
+    """
+    {chemical space (str) : {compound (str) : {'E' : formation energy (float, eV/atom),
+                                               'amts' : {element (str) : fractional amt of element in compound (float)
+                                                   for element in chemical space}}
+                                for compound in chemical space}
+        for chemical space in Materials Project}
+    """
+    ftar = os.path.join(this_dir, 'data', 'hullin.json.tar.gz')
+    tar = tarfile.open(ftar, 'r:gz')
+    f = tar.extract(tar.getmembers()[0])
+    fjson = os.path.join(this_dir, "hullin.json")
+    d = read_json(fjson)
+    os.remove(fjson)
+    return d
 
 def hullout():
+    """
+    {compound (str) : {'Ef' : formation energy (float, eV/atom),
+                       'Ed' : decomposition energy (float, eV/atom),
+                       'rxn' : decomposition reaction (str),
+                       'stability' : True if Ed <= 0 else False}
+        for compound in Materials Project}
+    """
     fjson = os.path.join(this_dir, "data", "hullout.json")
     return read_json(fjson)
 
 def mp_LiMnTMO():
+    """
+    {compound (str) : {'ID' : MP ID for ground-state structure (str),
+                       'Ef' : formation energy (float, eV/atom)}
+        for compound in MP in the Li-Mn-TM-O quaternary space}
+    """ 
     fjson = os.path.join(this_dir, "data", "mp_LiMnTMO.json")
     return read_json(fjson)
 
 def smact_LiMnTMO():
+    """
+    {'smact' : [compounds (str) generated in Li-Mn-TM-O space with SMACT]}
+    """ 
     fjson = os.path.join(this_dir, "data", "smact_LiMnTMO.json")
     return read_json(fjson)

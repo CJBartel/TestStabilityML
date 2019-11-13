@@ -1,6 +1,19 @@
 import os
 from mlstabilitytest.utils import StabilityAnalysis, EdAnalysis
 
+def main():
+    models = ['elfrac', 'cgcnn', 'arXiv19', 'auto', 'npj16', 'prb16', 'prb14']
+    experiments = ['LiMnTMO', 'allMP', 'smact']
+    training_props = ['Ef', 'Ed']
+    path_to_ml_data = '/Users/chrisbartel/Dropbox/postdoc/projects/ML_H/code/TestStabilityML/mlstabilitytest/ml_data'
+    for training_prop in training_props:
+        print('\n____ models trained on %s ____\n' % training_prop)
+        for experiment in experiments:
+            print('\n ~~~ %s ~~~\n' % experiment)
+            for model in models:
+                print('\n %s ' % model)
+                process(training_prop, model, experiment, path_to_ml_data)
+                
 def process(training_prop, model, experiment, path_to_ml_data):
     """
     Args:
@@ -36,19 +49,6 @@ def process(training_prop, model, experiment, path_to_ml_data):
     obj.results_summary
     print('got results')
     return
-
-def main():
-    models = ['elfrac', 'cgcnn', 'arXiv19', 'auto', 'npj16', 'prb16', 'prb14']
-    experiments = ['LiMnTMO', 'allMP', 'smact']
-    training_props = ['Ef', 'Ed']
-    path_to_ml_data = '/Users/chrisbartel/Dropbox/postdoc/projects/ML_H/code/TestStabilityML/mlstabilitytest/ml_data'
-    for training_prop in training_props:
-        print('\n____ models trained on %s ____\n' % training_prop)
-        for experiment in experiments:
-            print('\n ~~~ %s ~~~\n' % experiment)
-            for model in models:
-                print('\n %s ' % model)
-                process(training_prop, model, experiment, path_to_ml_data)
 
 if __name__ == '__main__':
     main()

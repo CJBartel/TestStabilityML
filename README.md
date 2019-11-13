@@ -8,8 +8,6 @@ plot.py generates all figures
 
 utils.py is called by analyze.py and plot.py
 
-
-/mp_data/ has relevant Materials Project (note hullin.json.tar.gz is a large file that must be unpacked to run from scratch)
+/mp_data/ has relevant Materials Project data
 
 /ml_data/ has input and output data for all ML models
-

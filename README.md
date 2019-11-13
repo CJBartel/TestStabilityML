@@ -1,4 +1,4 @@
-
+DOCS in development...
 
 depends on github.com/CJBartel/compmatscipy
 

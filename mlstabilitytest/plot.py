@@ -780,7 +780,7 @@ def make_fig5(training_prop):
     plt.subplots_adjust(hspace=0.35)
     
     plt.show()
-    savename = 'Fig5.png' if training_prop == 'Ef' else 'FigS5.png'
+    savename = 'Fig5.png' if training_prop == 'Ef' else 'Fig6.png'
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()   
     
@@ -966,20 +966,19 @@ def make_table1(training_prop):
         f.write(str(x))
     
 def main():
-    set_rc_params()
-    remake_fig1 = False
-    remake_fig2 = False
-    remake_fig3 = False
-    remake_fig4 = False
-    remake_fig5 = False
+    set_rc_params()    
+    remake_fig1 = True
+    remake_fig2 = True
+    remake_fig3 = True
+    remake_fig4 = True
+    remake_fig5 = True
     remake_table1 = True
-    remake_fig6 = False
-    remake_fig7 = False
-    remake_figS1 = False
-    remake_figS2 = False
-    remake_figS3 = False
-    remake_figS4 = False
-    remake_figS5 = False
+    remake_fig6 = True
+    remake_fig7 = True
+    remake_figS1 = True
+    remake_figS2 = True
+    remake_figS3 = True
+    remake_figS4 = True
     remake_tableS1 = True
     
     if remake_fig1:
@@ -993,7 +992,7 @@ def main():
     if remake_fig5:
         make_fig5('Ef')
     if remake_fig6:
-        make_fig6()
+        make_fig5('Ed')
     if remake_fig7:
         make_fig7()
     if remake_figS1:
@@ -1006,8 +1005,6 @@ def main():
     if remake_figS4:
         make_fig4('Ed')
         print('!!!!!!\nroost data placeholder for auto\n!!!!!')
-    if remake_figS5:
-        make_fig5('Ed')
     if remake_table1:
         make_table1('Ef')
     if remake_tableS1:

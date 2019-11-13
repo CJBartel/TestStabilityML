@@ -1,2 +1,2 @@
-recursive-include mlstabilitytest/data/data *.json
-recursive-include mlstabilitytest/data/ *.py
+recursive-include mlstabilitytest/mp_data/data *.json
+recursive-include mlstabilitytest/mp_data/ *.py

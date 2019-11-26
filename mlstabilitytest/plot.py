@@ -54,10 +54,8 @@ def main():
         make_fig2('LiMnTMO')
     if remake_figS3:
         make_fig3('Ed')
-        print('!!!!!!\nroost data placeholder for auto\n!!!!!')
     if remake_figS4:
         make_fig4('Ed')
-        print('!!!!!!\nroost data placeholder for auto\n!!!!!')
     if remake_table1:
         make_table1('Ef')
     if remake_tableS1:

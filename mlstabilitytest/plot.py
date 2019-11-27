@@ -632,7 +632,7 @@ def make_fig2(experiment):
     compounds = get_compounds(experiment)
     fig = plt.figure(figsize=(9,10))
     ax1 = plt.subplot(321)
-    model = 'elfrac'
+    model = 'ElFrac'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax1 = ax_actual_vs_pred(actual, pred, prop,
@@ -641,7 +641,7 @@ def make_fig2(experiment):
                             show_xlabel=False, show_ylabel=True,
                             show_mae=mae, show_model=model)    
     ax2 = plt.subplot(322)
-    model = 'prb14'
+    model = 'Meredig'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax2 = ax_actual_vs_pred(actual, pred, prop,
@@ -650,7 +650,7 @@ def make_fig2(experiment):
                             show_xlabel=False, show_ylabel=False,
                             show_mae=mae, show_model=model)    
     ax3 = plt.subplot(323)
-    model = 'prb16'
+    model = 'Magpie'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax3 = ax_actual_vs_pred(actual, pred, prop,
@@ -659,7 +659,7 @@ def make_fig2(experiment):
                             show_xlabel=False, show_ylabel=True,
                             show_mae=mae, show_model=model)    
     ax4 = plt.subplot(324)
-    model = 'npj16'
+    model = 'AutoMat'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax4 = ax_actual_vs_pred(actual, pred, prop,
@@ -668,7 +668,7 @@ def make_fig2(experiment):
                             show_xlabel=False, show_ylabel=False,
                             show_mae=mae, show_model=model)    
     ax5 = plt.subplot(325)
-    model = 'auto'
+    model = 'ElemNet'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax5 = ax_actual_vs_pred(actual, pred, prop,
@@ -677,7 +677,7 @@ def make_fig2(experiment):
                             show_xlabel=True, show_ylabel=True,
                             show_mae=mae, show_model=model)    
     ax6 = plt.subplot(326)
-    model = 'arXiv19'
+    model = 'Roost'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax6 = ax_actual_vs_pred(actual, pred, prop,
@@ -707,7 +707,7 @@ def make_fig3(training_prop):
     compounds = get_compounds(experiment)
     fig = plt.figure(figsize=(9,10))
     ax1 = plt.subplot(321)
-    model = 'elfrac'
+    model = 'ElFrac'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax1 = ax_actual_vs_pred(actual, pred, prop,
@@ -716,7 +716,7 @@ def make_fig3(training_prop):
                             show_xlabel=False, show_ylabel=True,
                             show_mae=mae, show_model=model)
     ax2 = plt.subplot(322)
-    model = 'prb14'
+    model = 'Meredig'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax2 = ax_actual_vs_pred(actual, pred, prop,
@@ -725,7 +725,7 @@ def make_fig3(training_prop):
                             show_xlabel=False, show_ylabel=False,
                             show_mae=mae, show_model=model)    
     ax3 = plt.subplot(323)
-    model = 'prb16'
+    model = 'Magpie'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax3 = ax_actual_vs_pred(actual, pred, prop,
@@ -734,7 +734,7 @@ def make_fig3(training_prop):
                             show_xlabel=False, show_ylabel=True,
                             show_mae=mae, show_model=model)    
     ax4 = plt.subplot(324)
-    model = 'npj16'
+    model = 'AutoMat'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax4 = ax_actual_vs_pred(actual, pred, prop,
@@ -743,7 +743,7 @@ def make_fig3(training_prop):
                             show_xlabel=False, show_ylabel=False,
                             show_mae=mae, show_model=model)    
     ax5 = plt.subplot(325)
-    model = 'auto'
+    model = 'ElemNet'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax5 = ax_actual_vs_pred(actual, pred, prop,
@@ -752,7 +752,7 @@ def make_fig3(training_prop):
                             show_xlabel=True, show_ylabel=True,
                             show_mae=mae, show_model=model)    
     ax6 = plt.subplot(326)
-    model = 'arXiv19'
+    model = 'Roost'
     actual, pred = get_actual(prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
     mae = get_mae(actual, pred)
     ax6 = ax_actual_vs_pred(actual, pred, prop,
@@ -803,22 +803,22 @@ def make_fig5(training_prop):
     figsize = (9, 10)
 
     fig = plt.figure(figsize=figsize)
-    model = 'elfrac'
+    model = 'ElFrac'
     ax1 = plt.subplot(321)
     ax1 = ax_LiMnTMO(training_prop, model, False, True)
-    model = 'prb14'
+    model = 'Meredig'
     ax2 = plt.subplot(322)
     ax2 = ax_LiMnTMO(training_prop, model, False, False) 
-    model = 'prb16'
+    model = 'Magpie'
     ax3 = plt.subplot(323)
     ax3 = ax_LiMnTMO(training_prop, model, False, True)
-    model = 'npj16'
+    model = 'AutoMat'
     ax4 = plt.subplot(324)
     ax4 = ax_LiMnTMO(training_prop, model, False, False)
-    model = 'auto'
+    model = 'ElemNet'
     ax5 = plt.subplot(325)
     ax5 = ax_LiMnTMO(training_prop, model, True, True)
-    model = 'arXiv19'
+    model = 'Roost'
     ax6 = plt.subplot(326)
     ax6 = ax_LiMnTMO(training_prop, model, True, False)    
     
@@ -829,65 +829,13 @@ def make_fig5(training_prop):
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()   
     
-def make_fig6():
-    fig = plt.figure(figsize=(16, 3.5))
-    ax1 = plt.subplot(131)
-    experiment = 'allMP'
-    prop = 'Ed'
-    training_prop = 'Ed'
-    model = 'arXiv19'
-    compounds = get_compounds(experiment)
-    actual = get_actual(prop, compounds)
-    pred = get_pred(training_prop, prop, experiment, model, compounds)
-    mae = get_mae(actual, pred)
-    ax1 = ax_actual_vs_pred(actual, pred, prop, exp=experiment,
-                           show_xticks=True, show_yticks=True,
-                           show_xlabel=True, show_ylabel=True,
-                           show_mae=mae, show_model=False)
-    
-    ax2 = plt.subplot(132)
-    ax2 = ax_hist_classification(training_prop, model, 
-                                 show_xlabel=True, show_ylabel=False, 
-                                 leg='upper left', show_model=False, show_yticks=True)
-    ax2 = plt.ylabel('No. compounds')
-    
-    ax3 = plt.subplot(133)
-    ax3 = ax_LiMnTMO(training_prop, model, True, True, False)
-    
-    ax3 = plt.text(-1.65, 0.29, 'a', weight='bold')
-    ax3 = plt.text(-0.99, 0.29, 'b', weight='bold')
-    ax3 = plt.text(-0.31, 0.29, 'c', weight='bold')
-
-    add_colorbar(fig, 
-                 '|MP - pred|' + r'$\/(\frac{eV}{atom})$', 
-                 (0, 0.2, 0.4, 0.6, 0.8, 1.),
-                 'plasma_r',
-                 0, 1,
-                 [0.92, 0.0, 0.02, 0.9],
-                 14, 14, 4, 1.5)  
-    
-    """
-    experiment = 'smact'
-    results = get_results(training_prop, experiment, model)
-    compounds, mp_LiMnTMO_stable, pred_LiMnTMO_stable = [results[k] for k in ['compounds', 'MP_stable', 'pred_stable']]
-    xpos, ypos = 1, 0.3
-    ax3 = plt.text(xpos, ypos, '%i SMACT compounds' % len(compounds))
-    ax3 = plt.text(xpos, ypos, '\n%i stable in MP' % len(mp_LiMnTMO_stable))
-    ax3 = plt.text(xpos, ypos, '\n\n%i pred. stable' % len(pred_LiMnTMO_stable))
-    ax3 = plt.text(xpos, ypos, '\n\n\n%i pred. stable\nand stable in MP' % len(set(mp_LiMnTMO_stable).intersection(pred_LiMnTMO_stable)))
-    """
-    plt.subplots_adjust(wspace=0.5)
-    plt.show()
-    fig.savefig(os.path.join(FIG_DIR, 'Fig6.png'))        
-    plt.close()
-    
 def make_fig7():
     fig = plt.figure(figsize=(9.5, 7))
     ax1 = plt.subplot(221)
     experiment = 'allMP'
     prop = 'Ef'
     training_prop = 'Ef'
-    model = 'cgcnn'
+    model = 'CGCNN'
     compounds = get_compounds(experiment)
     actual = get_actual(prop, compounds)
     pred = get_pred(training_prop, prop, experiment, model, compounds)
@@ -983,7 +931,7 @@ def make_table1(training_prop):
     
     x = PrettyTable()
     
-    models = ['elfrac', 'prb14', 'prb16', 'npj16', 'auto', 'arXiv19']
+    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost']
     
     x.field_names = ['']+models
     

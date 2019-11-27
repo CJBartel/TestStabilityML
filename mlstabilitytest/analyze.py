@@ -2,7 +2,7 @@ import os
 from mlstabilitytest.utils import StabilityAnalysis, EdAnalysis
 
 def main():
-    models = ['elfrac', 'cgcnn', 'arXiv19', 'auto', 'npj16', 'prb16', 'prb14']
+    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost', 'Deml', 'CGCNN']
     experiments = ['LiMnTMO', 'allMP', 'smact']
     training_props = ['Ef', 'Ed']
     path_to_ml_data = '/Users/chrisbartel/Dropbox/postdoc/projects/ML_H/code/TestStabilityML/mlstabilitytest/ml_data'
@@ -26,7 +26,7 @@ def process(training_prop, model, experiment, path_to_ml_data):
         Runs all relevant analyses
         Prints a summary
     """
-    if (model == 'cgcnn') and (experiment == 'smact'):
+    if (model == 'CGCNN') and (experiment == 'smact'):
         print('CGCNN cannot be applied directly to the SMACT problem because the structures are not known')
         return
     data_dir = os.path.join(path_to_ml_data, training_prop, experiment, model)

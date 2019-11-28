@@ -1,0 +1,1038 @@
+
+____ models trained on Ef ____
+
+
+ ~~~ LiMnTMO ~~~
+
+
+ ElFrac 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/ElFrac/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.099 eV/atom
+MAE on decomposition enthalpy = 0.064 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.062
+Recall = 0.222
+Accuracy = 0.861
+F1 = 0.098
+FPR = 0.116
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+2 | 30
+7 | 228
+
+Time elapsed = 0 s
+got results
+
+ Meredig 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/Meredig/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.098 eV/atom
+MAE on decomposition enthalpy = 0.065 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.062
+Recall = 0.222
+Accuracy = 0.861
+F1 = 0.098
+FPR = 0.116
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+2 | 30
+7 | 228
+
+Time elapsed = 0 s
+got results
+
+ Magpie 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/Magpie/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.060 eV/atom
+MAE on decomposition enthalpy = 0.052 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.036
+Recall = 0.111
+Accuracy = 0.869
+F1 = 0.054
+FPR = 0.105
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+1 | 27
+8 | 231
+
+Time elapsed = 0 s
+got results
+
+ AutoMat 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/AutoMat/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.073 eV/atom
+MAE on decomposition enthalpy = 0.066 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.111
+Recall = 0.333
+Accuracy = 0.888
+F1 = 0.167
+FPR = 0.093
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+3 | 24
+6 | 234
+
+Time elapsed = 0 s
+got results
+
+ ElemNet 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/ElemNet/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 1.336 eV/atom
+MAE on decomposition enthalpy = 1.355 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.940
+F1 = 0.000
+FPR = 0.027
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 7
+9 | 251
+
+Time elapsed = 0 s
+got results
+
+ Roost 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/Roost/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.030 eV/atom
+MAE on decomposition enthalpy = 0.030 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.929
+F1 = 0.000
+FPR = 0.039
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 10
+9 | 248
+
+Time elapsed = 0 s
+got results
+
+ Deml 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/Deml/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.127 eV/atom
+MAE on decomposition enthalpy = 0.123 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.869
+F1 = 0.000
+FPR = 0.101
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 26
+9 | 232
+
+Time elapsed = 0 s
+got results
+
+ CGCNN 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/CGCNN/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.014 eV/atom
+MAE on decomposition enthalpy = 0.014 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.455
+Recall = 0.556
+Accuracy = 0.963
+F1 = 0.500
+FPR = 0.023
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+5 | 6
+4 | 252
+
+Time elapsed = 0 s
+got results
+
+ ~~~ allMP ~~~
+
+
+ ElFrac 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/ElFrac/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.231 eV/atom
+MAE on decomposition enthalpy = 0.143 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.477
+Recall = 0.520
+Accuracy = 0.580
+F1 = 0.497
+FPR = 0.380
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+17681 | 19411
+16317 | 31605
+
+Time elapsed = 0 s
+got results
+
+ Meredig 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/Meredig/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.169 eV/atom
+MAE on decomposition enthalpy = 0.138 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.510
+Recall = 0.598
+Accuracy = 0.609
+F1 = 0.550
+FPR = 0.384
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+20347 | 19587
+13651 | 31429
+
+Time elapsed = 0 s
+got results
+
+ Magpie 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/Magpie/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.133 eV/atom
+MAE on decomposition enthalpy = 0.118 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.537
+Recall = 0.601
+Accuracy = 0.633
+F1 = 0.567
+FPR = 0.345
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+20420 | 17624
+13578 | 33392
+
+Time elapsed = 0 s
+got results
+
+ AutoMat 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/AutoMat/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.124 eV/atom
+MAE on decomposition enthalpy = 0.129 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.578
+Recall = 0.509
+Accuracy = 0.655
+F1 = 0.541
+FPR = 0.248
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+17305 | 12641
+16693 | 38375
+
+Time elapsed = 0 s
+got results
+
+ ElemNet 
+missing data for ElemNet-allMP
+
+ Roost 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/Roost/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.056 eV/atom
+MAE on decomposition enthalpy = 0.064 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.673
+Recall = 0.777
+Accuracy = 0.760
+F1 = 0.721
+FPR = 0.252
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+26429 | 12847
+7569 | 38169
+
+Time elapsed = 0 s
+got results
+
+ Deml 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/Deml/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.154 eV/atom
+MAE on decomposition enthalpy = 0.135 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.521
+Recall = 0.570
+Accuracy = 0.618
+F1 = 0.544
+FPR = 0.349
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+19382 | 17828
+14616 | 33188
+
+Time elapsed = 0 s
+got results
+
+ CGCNN 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/CGCNN/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.034 eV/atom
+MAE on decomposition enthalpy = 0.039 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.749
+Recall = 0.752
+Accuracy = 0.800
+F1 = 0.750
+FPR = 0.168
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+25550 | 8573
+8448 | 42443
+
+Time elapsed = 0 s
+got results
+
+ ~~~ smact ~~~
+
+
+ ElFrac 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/smact/ElFrac/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+685 (0.05) are predicted to be stable
+1 of those are stable in MP
+got results
+
+ Meredig 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/smact/Meredig/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+528 (0.04) are predicted to be stable
+1 of those are stable in MP
+got results
+
+ Magpie 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/smact/Magpie/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+619 (0.05) are predicted to be stable
+1 of those are stable in MP
+got results
+
+ AutoMat 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/smact/AutoMat/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+541 (0.04) are predicted to be stable
+1 of those are stable in MP
+got results
+
+ ElemNet 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+Analyzing SMACT compounds on 35 processors...
+Got 6 relevant chemical spaces in 5 s
+Updated hullin in 14 s
+Assessed stability in 0 s
+Time elapsed = 34 s
+13659 compounds investigated
+9 are stable in MP
+676 (0.05) are predicted to be stable
+2 of those are stable in MP
+got results
+
+ Roost 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/smact/Roost/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+507 (0.04) are predicted to be stable
+1 of those are stable in MP
+got results
+
+ Deml 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/smact/Deml/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+562 (0.04) are predicted to be stable
+1 of those are stable in MP
+got results
+
+ CGCNN 
+CGCNN cannot be applied directly to the SMACT problem because the structures are not known
+
+____ models trained on Ed ____
+
+
+ ~~~ LiMnTMO ~~~
+
+
+ ElFrac 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/ElFrac/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.029 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ Meredig 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/Meredig/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.028 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ Magpie 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/Magpie/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.027 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ AutoMat 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/AutoMat/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.028 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ ElemNet 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/ElemNet/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.576 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ Roost 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/Roost/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.029 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ Deml 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/Deml/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.028 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.000
+Recall = 0.000
+Accuracy = 0.966
+F1 = 0.000
+FPR = 0.000
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+0 | 0
+9 | 258
+
+Time elapsed = 0 s
+got results
+
+ CGCNN 
+missing data for CGCNN-LiMnTMO
+
+ ~~~ allMP ~~~
+
+
+ ElFrac 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/ElFrac/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.101 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.707
+Recall = 0.210
+Accuracy = 0.649
+F1 = 0.324
+FPR = 0.058
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+7147 | 2959
+26851 | 48057
+
+Time elapsed = 0 s
+got results
+
+ Meredig 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/Meredig/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.095 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.715
+Recall = 0.307
+Accuracy = 0.674
+F1 = 0.429
+FPR = 0.081
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+10425 | 4149
+23573 | 46867
+
+Time elapsed = 0 s
+got results
+
+ Magpie 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/Magpie/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.092 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.714
+Recall = 0.379
+Accuracy = 0.691
+F1 = 0.495
+FPR = 0.101
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+12886 | 5160
+21112 | 45856
+
+Time elapsed = 0 s
+got results
+
+ AutoMat 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/AutoMat/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.084 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.716
+Recall = 0.585
+Accuracy = 0.741
+F1 = 0.644
+FPR = 0.154
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+19888 | 7875
+14110 | 43141
+
+Time elapsed = 0 s
+got results
+
+ ElemNet 
+missing data for ElemNet-allMP
+
+ Roost 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/Roost/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.069 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.725
+Recall = 0.726
+Accuracy = 0.780
+F1 = 0.725
+FPR = 0.184
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+24698 | 9391
+9300 | 41625
+
+Time elapsed = 0 s
+got results
+
+ Deml 
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/Deml/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.098 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.690
+Recall = 0.315
+Accuracy = 0.670
+F1 = 0.433
+FPR = 0.095
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+10725 | 4824
+23273 | 46192
+
+Time elapsed = 0 s
+got results
+
+ CGCNN 
+missing data for CGCNN-allMP
+
+ ~~~ smact ~~~
+
+
+ ElFrac 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/smact/ElFrac/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+0 (0.00) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ Meredig 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/smact/Meredig/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+0 (0.00) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ Magpie 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/smact/Magpie/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+0 (0.00) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ AutoMat 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/smact/AutoMat/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+0 (0.00) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ ElemNet 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+Time elapsed = 14 s
+13659 compounds investigated
+9 are stable in MP
+0 (0.00) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ Roost 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/smact/Roost/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+299 (0.02) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ Deml 
+
+Checking input data...
+Data looks good.
+Time elapsed = 0 s.
+
+Reading existing smact results from: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/smact/Deml/ml_results.json.
+13659 compounds investigated
+9 are stable in MP
+0 (0.00) are predicted to be stable
+0 of those are stable in MP
+got results
+
+ CGCNN 
+CGCNN cannot be applied directly to the SMACT problem because the structures are not known

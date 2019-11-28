@@ -1,2 +1,3 @@
 recursive-include mlstabilitytest/mp_data/data *.json
+recursive-include mlstabilitytest/mp_data/data *tar.gz
 recursive-include mlstabilitytest/mp_data/ *.py

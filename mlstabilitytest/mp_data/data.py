@@ -8,9 +8,11 @@ Created on Wed Nov  6 11:00:21 2019
 
 import os
 from compmatscipy.handy_functions import read_json
-import tarfile
+#import tarfile
+from shutil import unpack_archive
 
 this_dir, this_filename = os.path.split(__file__)
+#this_dir = os.path.join(os.path.dirname(__file__))
 
 def spaces():
     """
@@ -38,9 +40,11 @@ def hullin():
         for chemical space in Materials Project}
     """
     ftar = os.path.join(this_dir, 'data', 'hullin.json.tar.gz')
-    tar = tarfile.open(ftar, 'r:gz')
-    f = tar.extract(tar.getmembers()[0])
-    fjson = os.path.join(this_dir, "hullin.json")
+#    tar = tarfile.open(ftar, 'r:gz')
+#    f = tar.extract(tar.getmembers()[0])
+    fjson = os.path.join(this_dir, 'data', "hullin.json")
+    data_dir = os.path.join(this_dir, 'data')
+    unpack_archive(ftar, data_dir)
     d = read_json(fjson)
     os.remove(fjson)
     return d

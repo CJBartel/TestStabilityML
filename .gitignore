@@ -18,4 +18,4 @@ lib64
 .idea
 *.DS_Store
 *~
-mlstabilitytest/examples/*/*/*hull*.json
+mlstabilitytest/ml_data/*/*/*/*hull*.json

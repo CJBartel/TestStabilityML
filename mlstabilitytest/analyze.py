@@ -6,6 +6,7 @@ def main():
     experiments = ['LiMnTMO', 'allMP', 'smact']
     training_props = ['Ef', 'Ed']
     path_to_ml_data = '/Users/chrisbartel/Dropbox/postdoc/projects/ML_H/code/TestStabilityML/mlstabilitytest/ml_data'
+    path_to_ml_data = '/home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data'
     for training_prop in training_props:
         print('\n____ models trained on %s ____\n' % training_prop)
         for experiment in experiments:

@@ -10,7 +10,7 @@ import os
 from compmatscipy.handy_functions import read_json, write_json
 from compmatscipy.CompAnalyzer import CompAnalyzer
 from compmatscipy.HullAnalysis import AnalyzeHull
-from mlstabilitytest.data.data import Ef, mp_LiMnTMO, smact_LiMnTMO, hullin, hullout, spaces
+from mlstabilitytest.mp_data.data import Ef, mp_LiMnTMO, smact_LiMnTMO, hullin, hullout, spaces
 import multiprocessing as multip
 from time import time
 from sklearn.metrics import confusion_matrix, r2_score

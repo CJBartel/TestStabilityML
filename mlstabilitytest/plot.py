@@ -19,7 +19,10 @@ this_dir, this_filename = os.path.split(__file__)
 FIG_DIR = os.path.join(this_dir, 'figures')
 
 def main():
-    set_rc_params()    
+    set_rc_params() 
+    
+    regen_all_figures = False
+    
     remake_fig1 = False
     remake_fig2 = False
     remake_fig3 = False
@@ -33,6 +36,21 @@ def main():
     remake_figS3 = False
     remake_figS4 = False
     remake_tableS1 = False
+    
+    if regen_all_figures:
+        remake_fig1 = True
+        remake_fig2 = True
+        remake_fig3 = True
+        remake_fig4 = True
+        remake_fig5 = True
+        remake_table1 = True
+        remake_fig6 = True
+        remake_fig7 = True
+        remake_figS1 = True
+        remake_figS2 = True
+        remake_figS3 = True
+        remake_figS4 = True
+        remake_tableS1 = True        
     
     if remake_fig1:
         make_fig1()
@@ -781,17 +799,17 @@ def make_fig4(training_prop):
     figsize=(9,10)
     fig = plt.figure(figsize=figsize)
     ax1 = plt.subplot(321)
-    ax1 = ax_hist_classification(training_prop, 'elfrac', False, False, 'center left', show_yticks=True)
+    ax1 = ax_hist_classification(training_prop, 'ElFrac', False, False, 'center left', show_yticks=True)
     ax2 = plt.subplot(322)
-    ax2 = ax_hist_classification(training_prop, 'prb14', False, False)
+    ax2 = ax_hist_classification(training_prop, 'Meredig', False, False)
     ax3 = plt.subplot(323)
-    ax3 = ax_hist_classification(training_prop, 'prb16', False, True,  show_yticks=True)
+    ax3 = ax_hist_classification(training_prop, 'Magpie', False, True,  show_yticks=True)
     ax4 = plt.subplot(324)
-    ax4 = ax_hist_classification(training_prop, 'npj16', False, False)
+    ax4 = ax_hist_classification(training_prop, 'AutoMat', False, False)
     ax5 = plt.subplot(325)
-    ax6 = ax_hist_classification(training_prop, 'auto', True, False, show_yticks=True)
+    ax6 = ax_hist_classification(training_prop, 'ElemNet', True, False, show_yticks=True)
     ax6 = plt.subplot(326)
-    ax6 = ax_hist_classification(training_prop, 'arXiv19', True, False)
+    ax6 = ax_hist_classification(training_prop, 'Roost', True, False)
     
     plt.show()
     

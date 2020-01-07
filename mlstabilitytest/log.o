@@ -127,25 +127,35 @@ Checking input data...
 Data looks good.
 Time elapsed = 0 s.
 
-Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/ElemNet/ml_results.json
+Generating stability input file on 35 processors...
+Writing to /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/ElemNet/ml_hullin.json
+Time elapsed = 21 s
+
+Generating stability output file on 35 processors...
+Writing to /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/ElemNet/ml_hullout.json.
+Time elapsed = 4 s.
+
+Compiling results...
+Writing to /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/LiMnTMO/ElemNet/ml_results.json.
+Time elapsed = 0 s.
 
 Summarizing performance...
 
-MAE on formation enthalpy = 1.336 eV/atom
-MAE on decomposition enthalpy = 1.355 eV/atom
+MAE on formation enthalpy = 0.036 eV/atom
+MAE on decomposition enthalpy = 0.035 eV/atom
 
 Classifying stable or unstable:
 Precision = 0.000
 Recall = 0.000
-Accuracy = 0.940
+Accuracy = 0.966
 F1 = 0.000
-FPR = 0.027
+FPR = 0.000
 
 Confusion matrix:
 TP | FP
 FN | TN = 
-0 | 7
-9 | 251
+0 | 0
+9 | 258
 
 Time elapsed = 0 s
 got results
@@ -357,7 +367,33 @@ Time elapsed = 0 s
 got results
 
  ElemNet 
-missing data for ElemNet-allMP
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ef/allMP/ElemNet/ml_results.json
+
+Summarizing performance...
+
+MAE on formation enthalpy = 0.112 eV/atom
+MAE on decomposition enthalpy = 0.110 eV/atom
+
+Classifying stable or unstable:
+Precision = 0.526
+Recall = 0.599
+Accuracy = 0.624
+F1 = 0.560
+FPR = 0.359
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+20362 | 18339
+13636 | 32677
+
+Time elapsed = 0 s
+got results
 
  Roost 
 
@@ -507,14 +543,14 @@ Checking input data...
 Data looks good.
 Time elapsed = 0 s.
 Analyzing SMACT compounds on 35 processors...
-Got 6 relevant chemical spaces in 5 s
+Got 6 relevant chemical spaces in 6 s
 Updated hullin in 14 s
 Assessed stability in 0 s
-Time elapsed = 34 s
+Time elapsed = 35 s
 13659 compounds investigated
 9 are stable in MP
-676 (0.05) are predicted to be stable
-2 of those are stable in MP
+470 (0.03) are predicted to be stable
+1 of those are stable in MP
 got results
 
  Roost 
@@ -674,11 +710,13 @@ Checking input data...
 Data looks good.
 Time elapsed = 0 s.
 
-Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/ElemNet/ml_results.json
+Compiling results...
+Writing to /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/LiMnTMO/ElemNet/ml_results.json.
+Time elapsed = 0 s.
 
 Summarizing performance...
 
-MAE on decomposition enthalpy = 0.576 eV/atom
+MAE on decomposition enthalpy = 0.026 eV/atom
 
 
 Classifying stable or unstable:
@@ -878,7 +916,33 @@ Time elapsed = 0 s
 got results
 
  ElemNet 
-missing data for ElemNet-allMP
+
+Checking input data...
+Data looks good.
+Time elapsed = 2 s.
+
+Reading existing results file: /home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data/Ed/allMP/ElemNet/ml_results.json
+
+Summarizing performance...
+
+MAE on decomposition enthalpy = 0.077 eV/atom
+
+
+Classifying stable or unstable:
+Precision = 0.683
+Recall = 0.696
+Accuracy = 0.749
+F1 = 0.689
+FPR = 0.216
+
+Confusion matrix:
+TP | FP
+FN | TN = 
+23663 | 11000
+10335 | 40016
+
+Time elapsed = 0 s
+got results
 
  Roost 
 
@@ -1001,10 +1065,10 @@ got results
 Checking input data...
 Data looks good.
 Time elapsed = 0 s.
-Time elapsed = 14 s
+Time elapsed = 15 s
 13659 compounds investigated
 9 are stable in MP
-0 (0.00) are predicted to be stable
+5 (0.00) are predicted to be stable
 0 of those are stable in MP
 got results
 

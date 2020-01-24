@@ -1,10 +1,10 @@
 from os.path import dirname, abspath, join
 from sys import argv
 import json
-from process import problem_dictionary, target_list, model_dictionary
+from mlstabilitytest.training.process import problem_dictionary, target_list, model_dictionary
 
 base_path = dirname(dirname(abspath(__file__)))
-output_base_path = join(base_path, "ml_data")
+output_base_path = join(base_path, "mlstabilitytest", "ml_data")
 
 
 def main(argv):
@@ -17,7 +17,8 @@ def main(argv):
         target = argv[2]
         model_name = argv[3]
     except IndexError:
-        print("Arguments are Problem Target Model")
+        print("Arguments should be Problem Target Model")
+        exit(1)
 
     try:
         train_func = problem_dictionary[problem]

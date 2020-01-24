@@ -1,7 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
-from MLModel import MLModel
+from mlstabilitytest.training.MLModel import MLModel
 from matminer.featurizers.composition import ElementProperty, ElementFraction, Meredig
 from xgboost import XGBRegressor
 from pymatgen import Composition
@@ -79,5 +79,5 @@ class MatminerModel(MLModel):
         """
         predictions = self.model.predict(X)
 
-        #Predict returns float32, which is not json seriallizable, so cast to float
+        # Predict returns float32, which is not json seriallizable, so cast to float
         return [float(x) for x in predictions]

@@ -1,7 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
-from MLModel import MLModel
+from mlstabilitytest.training.MLModel import MLModel
 from automatminer.featurization import AutoFeaturizer
 from automatminer.preprocessing import FeatureReducer, DataCleaner
 from automatminer.automl import TPOTAdaptor, SinglePipelineAdaptor

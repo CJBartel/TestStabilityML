@@ -1,14 +1,14 @@
 from os.path import dirname, abspath, join
 import json
 from sklearn.model_selection import KFold
-from MatminerModel import MatminerModel
-from ElemNetModel import ElemNet
-from AutoMatModel import AutoMat
+from mlstabilitytest.training.MatminerModel import MatminerModel
+from mlstabilitytest.training.ElemNetModel import ElemNet
+from mlstabilitytest.training.AutoMatModel import AutoMat
 
 base_path = dirname(dirname(abspath(__file__)))
 data_path = join(base_path, "mp_data", "data")
 
-#Dictionary of available models
+# Dictionary of available models
 model_dictionary = {"Deml": lambda target: MatminerModel('Deml', target),
                     "ElFrac": lambda target: MatminerModel('ElFrac', target),
                     "Magpie": lambda target: MatminerModel('Magpie', target),
@@ -17,11 +17,11 @@ model_dictionary = {"Deml": lambda target: MatminerModel('Deml', target),
                     "AutoMat": lambda target: AutoMat(target),
                     }
 
-#List of available target properties
+# List of available target properties
 target_list = ["Ed", "Ef"]
 
 
-#Functions to perform training and prediction for a problem, given an input model and target property
+# Functions to perform training and prediction for a problem, given an input model and target property
 def allMP(model, target):
 
     input_file = join(data_path, "hullout.json")
@@ -144,7 +144,8 @@ def smact(model, target):
 
     return predictions
 
-#Dictionary of available problem functions
+
+# Dictionary of available problem functions
 problem_dictionary = {"allMP": allMP,
                       "LiMnTMO": LiMnTMO,
                       "smact": smact}

@@ -2,7 +2,7 @@ import re
 import numpy as np
 import pandas as pd
 from collections import defaultdict
-from MLModel import MLModel
+from mlstabilitytest.training.MLModel import MLModel
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout, BatchNormalization

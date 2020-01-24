@@ -8,3 +8,4 @@ Created on Wed Nov  6 11:00:34 2019
 
 #from .data import Ef, hullin, hullout, mp_LiMnTMO, spaces
 from .mp_data import data
+from .training import *

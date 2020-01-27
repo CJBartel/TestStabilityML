@@ -529,7 +529,6 @@ def ax_roc(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False
     npts = 100
     threshes = np.linspace(-0.4, 0.4, npts)
     for thresh in threshes:
-        print(thresh)
         tp_indices = [i for i in range(len(actual)) 
                         if actual[i] <= thresh 
                         if pred[i] <= thresh]
@@ -581,8 +580,6 @@ def ax_roc(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False
                      lw=lw, 
                      s=s)
         
-    print(len(x))
-    print(len(y))
     
     ax = plt.plot(xlim, ylim, color='black', lw=1.5, ls='--', alpha=alpha)
     
@@ -1251,8 +1248,8 @@ def make_table1(training_prop):
     unique_pred_stables = list(set(all_pred_stables))
     pred_by_all = [c for c in unique_pred_stables if all_pred_stables.count(c) == 6]
 
-    print('%i different cmpds predicted to be stable' % len(unique_pred_stables))
-    print('%i cmpds pred by all models to be stable' % len(pred_by_all))
+    #print('%i different cmpds predicted to be stable' % len(unique_pred_stables))
+    #print('%i cmpds pred by all models to be stable' % len(pred_by_all))
     rows = [row1, row2, row3, row4, row5]
     for r in rows:
         x.add_row(r)

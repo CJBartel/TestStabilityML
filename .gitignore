@@ -22,3 +22,4 @@ mlstabilitytest/ml_data/*/*/*/*hull*.json
 mlstabilitytest/change_dir_names.py
 mlstabilitytest/sub.sh
 mlstabilitytest/log.*
+*__pycache__*

@@ -7,8 +7,7 @@ Created on Tue Nov 12 14:51:51 2019
 """
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-from compmatscipy.plotting_functions import set_rc_params, tableau_colors
-from compmatscipy.handy_functions import read_json
+from mlstabilitytest.stability.utils import read_json
 from mlstabilitytest.mp_data.data import hullout, mp_LiMnTMO, smact_LiMnTMO
 import os
 import numpy as np
@@ -21,7 +20,7 @@ FIG_DIR = os.path.join(this_dir, 'figures')
 def main():
     set_rc_params() 
     
-    regen_all_figures = False
+    regen_all_figures = True
     
     remake_fig1 = False
     remake_fig2 = False
@@ -35,6 +34,7 @@ def main():
     remake_figS2 = False
     remake_figS3 = False
     remake_figS4 = False
+    remake_figS5 = False
     remake_tableS1 = False
     
     if regen_all_figures:
@@ -50,6 +50,7 @@ def main():
         remake_figS2 = True
         remake_figS3 = True
         remake_figS4 = True
+        remake_figS5 = True
         remake_tableS1 = True        
     
     if remake_fig1:
@@ -69,16 +70,69 @@ def main():
     if remake_figS1:
         make_figS1()
     if remake_figS2:
-        make_fig2('LiMnTMO')
+        make_figS2('Ef')
     if remake_figS3:
-        make_fig3('Ed')
+        make_fig2('LiMnTMO')
     if remake_figS4:
+        make_fig3('Ed')
+    if remake_figS5:
         make_fig4('Ed')
     if remake_table1:
         make_table1('Ef')
     if remake_tableS1:
         make_table1('Ed')
     return
+
+def tableau_colors():
+    """
+    Args:
+        
+    Returns:
+        dictionary of {color (str) : RGB (tuple) for the dark tableau20 colors}
+    """
+    tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),    
+                 (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),    
+                 (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),    
+                 (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),    
+                 (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]    
+      
+    for i in range(len(tableau20)):    
+        r, g, b = tableau20[i]    
+        tableau20[i] = (r / 255., g / 255., b / 255.)
+    names = ['blue', 'orange', 'green', 'red', 'purple', 'brown', 'pink', 'gray', 'yellow', 'turquoise']
+    colors = [tableau20[i] for i in range(0, 20, 2)]
+    return dict(zip(names,colors))
+
+def set_rc_params():
+    """
+    Args:
+        
+    Returns:
+        dictionary of settings for mpl.rcParams
+    """
+    params = {'axes.linewidth' : 1.5,
+              'axes.unicode_minus' : False,
+              'figure.dpi' : 300,
+              'font.size' : 20,
+              'legend.frameon' : False,
+              'legend.handletextpad' : 0.4,
+              'legend.handlelength' : 1,
+              'legend.fontsize' : 12,
+              'mathtext.default' : 'regular',
+              'savefig.bbox' : 'tight',
+              'xtick.labelsize' : 20,
+              'ytick.labelsize' : 20,
+              'xtick.major.size' : 6,
+              'ytick.major.size' : 6,
+              'xtick.major.width' : 1.5,
+              'ytick.major.width' : 1.5,
+              'xtick.top' : True,
+              'ytick.right' : True,
+              'axes.edgecolor' : 'black',
+              'figure.figsize': [6, 4]}
+    for p in params:
+        mpl.rcParams[p] = params[p]
+    return params
 
 def get_results(training_prop, experiment, model):
     return read_json(os.path.join(this_dir, 
@@ -286,7 +340,7 @@ def add_colorbar(fig, label, ticks,
         cb.ax.yaxis.set_ticks_position(tick_pos)
     return fig 
 
-def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False, show_model=True, show_yticks=False):
+def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False, show_model=True, show_yticks=False, thresh=0, show_second_ylabel=False, show_second_yticks=False, short_ylabels=False):
     experiment = 'allMP'
     prop = 'Ed'
     compounds = get_compounds(experiment)
@@ -298,27 +352,28 @@ def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=
     xlim = (-0.2, 0.2)
     ylim = (0, 1200)
     colors = tableau_colors()
-    alpha = 0.5
+    alpha = 0.3
     xticks = (-0.2, -0.1, 0, 0.1, 0.2)
     yticks = (0, 400, 800, 1200)
     
     tp_indices = [i for i in range(len(actual)) 
-                    if actual[i] <= 0 
-                    if pred[i] <= 0]
+                    if actual[i] <= thresh 
+                    if pred[i] <= thresh]
     fp_indices = [i for i in range(len(actual)) 
-                    if actual[i] > 0 
-                    if pred[i] <= 0]
+                    if actual[i] > thresh 
+                    if pred[i] <= thresh]
     tn_indices = [i for i in range(len(actual)) 
-                    if actual[i] > 0 
-                    if pred[i] > 0]
+                    if actual[i] > thresh 
+                    if pred[i] > thresh]
     fn_indices = [i for i in range(len(actual)) 
-                    if actual[i] <= 0 
-                    if pred[i] > 0]
+                    if actual[i] <= thresh 
+                    if pred[i] > thresh]
     tp = [actual[i] for i in tp_indices]
     fp = [actual[i] for i in fp_indices]
     tn = [actual[i] for i in tn_indices]
     fn = [actual[i] for i in fn_indices]    
-        
+    
+    
     ax = plt.hist(tp, 
                   bins=bins,
                   range=xlim,
@@ -344,19 +399,36 @@ def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=
                   alpha=alpha,
                   label='incorrect')
     
-    ax = plt.plot([0, 0], [0,100000], color='black', lw=1.5, ls='--', alpha=alpha)
+    """
+    ax = plt.hist(actual,
+                  bins=bins,
+                  range=xlim,
+                  color=colors['blue'],
+                  alpha=alpha,
+                  label='__nolegend__')
+    """
     
-    xpos, ypos = 0.18, 1100
+    ax = plt.plot([thresh, thresh], [0,100000], color='black', lw=1.5, ls='--', alpha=alpha)
+    
+    xpos, ypos = 0.18, ylim[1]-50
     fontsize=14
+
+    tp, fp, tn, fn = len(tp), len(fp), len(tn), len(fn)
+    acc = (tp+tn) / (tp+tn+fp+fn)
+    fpr = fp / (fp+tn)
+    tpr = tp / (tp+fn)
+    prec = tp / (tp+fp)
+    rec = tp / (tp+fn)
+    f1 = 2*(prec*rec)/(prec+rec)
     ax = plt.text(xpos, ypos, 'Acc = %.2f\nF1 = %.2f\nFPR = %.2f' 
-                      % (stats['scores']['accuracy'],
-                         stats['scores']['f1'],
-                         stats['scores']['fpr']),
+                      % (acc,
+                         f1,
+                         fpr),
                          fontsize=fontsize,
                          verticalalignment='top'
                          ,horizontalalignment='right') 
                       
-    xpos, ypos = -0.19, 1150
+    xpos, ypos = -0.19, ylim[1]-50
     fontsize=20
     if show_model:
         ax = plt.text(xpos, ypos, model, verticalalignment='top')
@@ -369,7 +441,10 @@ def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=
         xlabel = ''
         ax = plt.gca().xaxis.set_ticklabels([])
     if show_ylabel:
-        ylabel = 'Number of compounds'
+        if not short_ylabels:
+            ylabel = 'Number of compounds'
+        else:
+            ylabel = 'No. compounds'
     else:
         ylabel = ''
     if not show_yticks:
@@ -380,10 +455,199 @@ def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=
     ax = plt.xlim(xlim)
     if leg:
         ax = plt.legend(loc=leg)
+        
+    ax = plt.gca().twinx()
+    bins = bins
+    width = 0.4
+    slide = 0.01
+    markers = np.linspace(-0.2-width/bins, 0.2+width/bins, bins)
+    x = markers
+    y = []
+    for marker in markers:
+        max_val = marker+slide
+        min_val = marker-slide
+        indices = [i for i in range(len(actual)) if actual[i] < max_val if actual[i] >= min_val]
+        actual_ = [actual[i] for i in indices]
+        pred_ = [pred[i] for i in indices]
+        tp_indices = [i for i in range(len(actual_)) 
+                        if actual_[i] <= thresh 
+                        if pred_[i] <= thresh]
+        fp_indices = [i for i in range(len(actual_)) 
+                        if actual_[i] > thresh 
+                        if pred_[i] <= thresh]
+        tn_indices = [i for i in range(len(actual_)) 
+                        if actual_[i] > thresh 
+                        if pred_[i] > thresh]
+        fn_indices = [i for i in range(len(actual_)) 
+                        if actual_[i] <= thresh 
+                        if pred_[i] > thresh]  
+        acc = (len(tp_indices) + len(tn_indices))/len(actual_)
+        y.append(acc)
+    c = tableau_colors()['blue']
+    ax = plt.plot(x, y, color=c)
+    if training_prop == 'Ef':
+        ticks = [0.4, 0.6, 0.8, 1.0]
+        ylim = [0.3, 1.35]
+    else:
+        ticks = [0.0, 0.5, 1.0]
+        ylim = [0.0, 1.5]
+    ax = plt.yticks(ticks)
+    ax = plt.gca().spines['right'].set_color(c)
+    ax = plt.gca().yaxis.label.set_color(c)
+    ax = plt.gca().tick_params(axis='y', colors=c)
+    if show_second_ylabel:
+        if not short_ylabels:
+            ax = plt.ylabel('Accuracy (moving average)')
+        else:
+            ax = plt.ylabel('Avg. acc.      ')
+    if not show_second_yticks:
+        ax = plt.gca().yaxis.set_ticklabels([])
+    for tick in ticks:
+        ax = plt.plot(xlim, [tick, tick], color=c, ls='--', alpha=0.5, lw=0.5)
+    ax = plt.ylim(ylim)
+    return ax
+
+def ax_roc(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False, show_model=True, show_yticks=False, thresh=0):
+    experiment = 'allMP'
+    prop = 'Ed'
+    compounds = get_compounds(experiment)
+    actual = get_actual(prop, compounds)
+    pred = get_pred(training_prop, prop, experiment, model, compounds)
+    results = get_results(training_prop, experiment, model)
+    stats = results['stats']['Ed']['cl']['0']
+    bins = 200
+    xlim = (-0.2, 0.2)
+    ylim = (0, 1200)
+    colors = tableau_colors()
+    alpha = 0.5
+    xticks = (0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
+    yticks = xticks
+    xlim = (-0.05, 1.05)
+    ylim = xlim
+    
+    data = {}
+    npts = 100
+    threshes = np.linspace(-0.4, 0.4, npts)
+    for thresh in threshes:
+        print(thresh)
+        tp_indices = [i for i in range(len(actual)) 
+                        if actual[i] <= thresh 
+                        if pred[i] <= thresh]
+        fp_indices = [i for i in range(len(actual)) 
+                        if actual[i] > thresh 
+                        if pred[i] <= thresh]
+        tn_indices = [i for i in range(len(actual)) 
+                        if actual[i] > thresh 
+                        if pred[i] > thresh]
+        fn_indices = [i for i in range(len(actual)) 
+                        if actual[i] <= thresh 
+                        if pred[i] > thresh]
+        tp = [actual[i] for i in tp_indices]
+        fp = [actual[i] for i in fp_indices]
+        tn = [actual[i] for i in tn_indices]
+        fn = [actual[i] for i in fn_indices] 
+        
+        tp, fp, tn, fn = len(tp), len(fp), len(tn), len(fn)
+        acc = (tp+tn) / (tp+tn+fp+fn)
+        fpr = fp / (fp+tn)
+        tpr = tp / (tp+fn)
+        prec = tp / (tp+fp)
+        rec = tp / (tp+fn)
+        f1 = 2*(prec*rec)/(prec+rec)
+        data[thresh] = {'tpr' : tpr,
+                        'fpr' : fpr}
+    
+    z = sorted(list(data.keys()))
+    x = [data[v]['fpr'] for v in z]
+    y = [data[v]['tpr'] for v in z]
+    
+    cmap = 'viridis'
+    vmin, vmax = -0.4, 0.4
+    edgecolors = None
+    cmap_values = z
+    marker = 'o'
+    lw = 1
+    s=35
+    alpha = 1
+    cm = plt.cm.get_cmap(cmap)
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+    ax = plt.scatter(x, y,
+                     c=cmap_values,
+                     cmap=cm,
+                     norm=norm,
+                     edgecolors=edgecolors,
+                     alpha=alpha, 
+                     marker=marker, 
+                     lw=lw, 
+                     s=s)
+        
+    print(len(x))
+    print(len(y))
+    
+    ax = plt.plot(xlim, ylim, color='black', lw=1.5, ls='--', alpha=alpha)
+    
+    xpos, ypos = 1, 0.0
+    fontsize=20
+    if show_model:
+        ax = plt.text(xpos, ypos, model, 
+                      verticalalignment='bottom', fontsize=fontsize,
+                      horizontalalignment='right')
+    
+    ax = plt.xticks(xticks)
+    ax = plt.yticks(yticks)
+    if show_xlabel:
+        xlabel = 'FPR'
+    else:
+        xlabel = ''
+        ax = plt.gca().xaxis.set_ticklabels([])
+    if show_ylabel:
+        ylabel = 'TPR'
+    else:
+        ylabel = ''
+    if not show_yticks:
+        ax = plt.gca().yaxis.set_ticklabels([])
+    ax = plt.xlabel(xlabel)
+    ax = plt.ylabel(ylabel)
+    ax = plt.ylim(ylim)
+    ax = plt.xlim(xlim)
     
     return ax
 
-def ax_LiMnTMO(training_prop, model, show_xlabel, show_ylabel, show_model=True):
+def make_figS2(training_prop):
+    figsize=(9,10)
+    fig = plt.figure(figsize=figsize)
+    ax1 = plt.subplot(321)
+    ax1 = ax_roc(training_prop, 'ElFrac', False, False, 'center left', show_yticks=True)
+    ax2 = plt.subplot(322)
+    ax2 = ax_roc(training_prop, 'Meredig', False, False)
+    ax3 = plt.subplot(323)
+    ax3 = ax_roc(training_prop, 'Magpie', False, True,  show_yticks=True)
+    ax4 = plt.subplot(324)
+    ax4 = ax_roc(training_prop, 'AutoMat', False, False)
+    ax5 = plt.subplot(325)
+    ax6 = ax_roc(training_prop, 'ElemNet', True, False, show_yticks=True)
+    ax6 = plt.subplot(326)
+    ax6 = ax_roc(training_prop, 'Roost', True, False)
+    
+    vmin, vmax = -0.4, 0.4
+    cticks = (-0.4, -0.2, 0.0, 0.2, 0.4)
+        
+    add_colorbar(fig, 
+                 'stability threshold ' +r'$(\frac{eV}{atom})$', 
+                 cticks,
+                 'viridis',
+                 vmin, vmax,
+                 [0.95, 0.345, 0.03, 0.3],
+                 14, 14, 4, 1.5)
+    
+    plt.show()
+    
+    savename = 'FigS2.png' if training_prop == 'Ef' else 'Ed_roc.png'
+
+    fig.savefig(os.path.join(FIG_DIR, savename))
+    plt.close()     
+
+def ax_LiMnTMO(training_prop, model, show_xlabel, show_ylabel, show_model=True, thresh=0):
     experiment = 'LiMnTMO'
     prop = 'Ed'
     compounds = get_compounds(experiment)
@@ -396,15 +660,15 @@ def ax_LiMnTMO(training_prop, model, show_xlabel, show_ylabel, show_model=True):
     s = 50
     c_stable = tableau_colors()['blue']
     c_unstable = tableau_colors()['red']
-    ax = plt.plot([0, 0], ylim_Ed, ls='--', color='black', alpha=0.4)
-    ax = plt.plot(xlim_Ed, [0, 0], ls='--', color='black', alpha=0.4)
+    ax = plt.plot([thresh, thresh], ylim_Ed, ls='--', color='black', alpha=0.4)
+    ax = plt.plot(xlim_Ed, [thresh, thresh], ls='--', color='black', alpha=0.4)
     labels = []
     for i in range(len(actual)):
-        if (actual[i] <= 0) and (pred[i] <= 0):
+        if (actual[i] <= thresh) and (pred[i] <= thresh):
             label = 'tp'
-        elif pred[i] <= 0:
+        elif pred[i] <= thresh:
             label = 'fp'
-        elif (actual[i] > 0) and (pred[i] > 0):
+        elif (actual[i] > thresh) and (pred[i] > thresh):
             label = 'tn'
         else:
             label = 'fn'
@@ -629,6 +893,9 @@ def make_fig1():
     
     ax2 = plt.text(-4.9, -0.9, 'stable', color=stable_c)
     ax2 = plt.text(-4.9, 0.9, 'unstable', color=unstable_c, verticalalignment='top')
+    
+    indices = [i for i in range(len(x)) if x[i] != y[i]]
+    x, y = [x[i] for i in indices], [y[i] for i in indices]
     m, b, r, p, s = linregress(x, y)
     
     fake_x = np.linspace(xlim[0], xlim[1], 1000)
@@ -716,7 +983,7 @@ def make_fig2(experiment):
                  14, 14, 4, 1.5)
     
     plt.show()
-    savename = 'Fig2.png' if experiment == 'allMP' else 'FigS2.png'
+    savename = 'Fig2.png' if experiment == 'allMP' else 'FigS3.png'
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()
     
@@ -791,59 +1058,65 @@ def make_fig3(training_prop):
                  14, 14, 4, 1.5)
     
     plt.show()
-    savename = 'Fig3.png' if training_prop == 'Ef' else 'FigS3.png'
+    savename = 'Fig3.png' if training_prop == 'Ef' else 'FigS4.png'
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()
     
-def make_fig4(training_prop):
+def make_fig4(training_prop, thresh=0):
     figsize=(9,10)
     fig = plt.figure(figsize=figsize)
     ax1 = plt.subplot(321)
-    ax1 = ax_hist_classification(training_prop, 'ElFrac', False, False, 'center left', show_yticks=True)
+    ax1 = ax_hist_classification(training_prop, 'ElFrac', False, False, show_yticks=True, thresh=thresh, show_second_ylabel=False, show_second_yticks=False)
     ax2 = plt.subplot(322)
-    ax2 = ax_hist_classification(training_prop, 'Meredig', False, False)
+    ax2 = ax_hist_classification(training_prop, 'Meredig', False, False, thresh=thresh, show_second_ylabel=False, show_second_yticks=True)
     ax3 = plt.subplot(323)
-    ax3 = ax_hist_classification(training_prop, 'Magpie', False, True,  show_yticks=True)
+    ax3 = ax_hist_classification(training_prop, 'Magpie', False, True,  'lower left', show_yticks=True, thresh=thresh, show_second_ylabel=False, show_second_yticks=False)
     ax4 = plt.subplot(324)
-    ax4 = ax_hist_classification(training_prop, 'AutoMat', False, False)
+    ax4 = ax_hist_classification(training_prop, 'AutoMat', False, False, thresh=thresh, show_second_ylabel=True, show_second_yticks=True)
     ax5 = plt.subplot(325)
-    ax6 = ax_hist_classification(training_prop, 'ElemNet', True, False, show_yticks=True)
+    ax6 = ax_hist_classification(training_prop, 'ElemNet', True, False, show_yticks=True, thresh=thresh, show_second_ylabel=False, show_second_yticks=False)
     ax6 = plt.subplot(326)
-    ax6 = ax_hist_classification(training_prop, 'Roost', True, False)
+    ax6 = ax_hist_classification(training_prop, 'Roost', True, False, thresh=thresh, show_second_ylabel=False, show_second_yticks=True)
     
     plt.show()
     
-    savename = 'Fig4.png' if training_prop == 'Ef' else 'FigS4.png'
+    if thresh == 0:
+        savename = 'Fig4.png' if training_prop == 'Ef' else 'FigS5.png'
+    else:
+        savename = 'Fig4_%s.png' % str(int(1000*thresh)) if training_prop == 'Ef' else 'FigS5_%s.png' % str(int(1000*thresh))
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()   
     
-def make_fig5(training_prop):
+def make_fig5(training_prop, thresh=0):
     figsize = (9, 10)
 
     fig = plt.figure(figsize=figsize)
     model = 'ElFrac'
     ax1 = plt.subplot(321)
-    ax1 = ax_LiMnTMO(training_prop, model, False, True)
+    ax1 = ax_LiMnTMO(training_prop, model, False, True, thresh=thresh)
     model = 'Meredig'
     ax2 = plt.subplot(322)
-    ax2 = ax_LiMnTMO(training_prop, model, False, False) 
+    ax2 = ax_LiMnTMO(training_prop, model, False, False, thresh=thresh) 
     model = 'Magpie'
     ax3 = plt.subplot(323)
-    ax3 = ax_LiMnTMO(training_prop, model, False, True)
+    ax3 = ax_LiMnTMO(training_prop, model, False, True, thresh=thresh)
     model = 'AutoMat'
     ax4 = plt.subplot(324)
-    ax4 = ax_LiMnTMO(training_prop, model, False, False)
+    ax4 = ax_LiMnTMO(training_prop, model, False, False, thresh=thresh)
     model = 'ElemNet'
     ax5 = plt.subplot(325)
-    ax5 = ax_LiMnTMO(training_prop, model, True, True)
+    ax5 = ax_LiMnTMO(training_prop, model, True, True, thresh=thresh)
     model = 'Roost'
     ax6 = plt.subplot(326)
-    ax6 = ax_LiMnTMO(training_prop, model, True, False)    
+    ax6 = ax_LiMnTMO(training_prop, model, True, False, thresh=thresh)    
     
     plt.subplots_adjust(hspace=0.35)
     
     plt.show()
-    savename = 'Fig5.png' if training_prop == 'Ef' else 'Fig6.png'
+    if thresh == 0:
+        savename = 'Fig5.png' if training_prop == 'Ef' else 'Fig6.png'
+    else:
+        savename = 'Fig5_%s.png' % str(int(1000*thresh)) if training_prop == 'Ef' else 'Fig6_%s.png' % str(int(1000*thresh))
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()   
     
@@ -874,18 +1147,22 @@ def make_fig7():
                            show_mae=mae, show_model=False)
         
     ax3 = plt.subplot(223)
+    ax3 = ax_hist_classification(training_prop, 'cgcnn', True, True,  'lower left', show_yticks=True, thresh=0, show_second_ylabel=True, show_second_yticks=True, short_ylabels=True, show_model=False)
+    """
     ax3 = ax_hist_classification(training_prop, model, 
                                  show_xlabel=True, show_ylabel=False, 
                                  leg='upper left', show_model=False, show_yticks=True)
+    
     ax3 = plt.ylabel('No. compounds')
+    """
     
     ax4 = plt.subplot(224)
     ax4 = ax_LiMnTMO(training_prop, model, True, True, False)
     
-    ax4 = plt.text(-1, 0.82, 'a', weight='bold')
-    ax4 = plt.text(-0.3, 0.82, 'b', weight='bold')
-    ax4 = plt.text(-1, 0.3, 'c', weight='bold')
-    ax4 = plt.text(-0.3, 0.3, 'd', weight='bold')
+    ax4 = plt.text(-1.25, 0.82, 'a', weight='bold')
+    ax4 = plt.text(-0.4, 0.82, 'b', weight='bold')
+    ax4 = plt.text(-1.25, 0.3, 'c', weight='bold')
+    ax4 = plt.text(-0.4, 0.3, 'd', weight='bold')
 
     
     add_colorbar(fig, 
@@ -893,10 +1170,10 @@ def make_fig7():
                  (0, 0.2, 0.4, 0.6, 0.8, 1.),
                  'plasma_r',
                  0, 1,
-                 [0.95, 0.3, 0.025, 0.35],
+                 [0.43, 0.6, 0.015, 0.25],
                  14, 14, 4, 1.5)
     
-    plt.subplots_adjust(hspace=0.55, wspace=0.5)
+    plt.subplots_adjust(hspace=0.55, wspace=0.87)
     plt.show()
     
     fig.savefig(os.path.join(FIG_DIR, 'Fig7.png'))        
@@ -968,6 +1245,14 @@ def make_table1(training_prop):
     row4 = [row_names[3]]+[np.round(100*len(data[m]['pred_stable'])/len(data[m]['compounds']), 1) for m in models]
     row5 = [row_names[4]]+[len(set(data[m]['MP_stable']).intersection(set(data[m]['pred_stable']))) for m in models]
     
+    row5_cmpds = [set(data[m]['MP_stable']).intersection(set(data[m]['pred_stable'])) for m in models]
+    all_pred_stables = [data[m]['pred_stable'] for m in models]
+    all_pred_stables = [j for i in all_pred_stables for j in i]
+    unique_pred_stables = list(set(all_pred_stables))
+    pred_by_all = [c for c in unique_pred_stables if all_pred_stables.count(c) == 6]
+
+    print('%i different cmpds predicted to be stable' % len(unique_pred_stables))
+    print('%i cmpds pred by all models to be stable' % len(pred_by_all))
     rows = [row1, row2, row3, row4, row5]
     for r in rows:
         x.add_row(r)

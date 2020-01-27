@@ -1,5 +1,5 @@
 import os
-from mlstabilitytest.utils import StabilityAnalysis, EdAnalysis
+from mlstabilitytest.utils.StabilityAnalysis import StabilityAnalysis, EdAnalysis
 
 def main():
     models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost', 'Deml', 'CGCNN']

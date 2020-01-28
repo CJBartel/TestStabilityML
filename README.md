@@ -78,7 +78,7 @@ mlstabilitytest/analyze_models.py
 ```
 1. Produce ml_input.json using cross-validation
     * {formula (str) : predicted formation energy (float, eV/atom) for formulas relevant to particular test}
-        * each experiment (allMP, LiMnTMO, smact) requires a certain set of formulas which can be obtained by comparing with mlstabilitytest/ml_data/*/*/ml_input.json
+        * each experiment (allMP, LiMnTMO, smact) requires a certain set of formulas which can be obtained by comparing with mlstabilitytest/ml_data/TRAINED_ON/EXPERIMENT/MODEL/ml_input.json
 2. Evaluate how well the learned formation energies do on the three tests (allMP, LiMnTMO, smact) utilizing:
     ```
     mlstability.stability.StabilityAnalysis.StabilityAnalysis 

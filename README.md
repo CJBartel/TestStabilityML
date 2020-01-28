@@ -19,9 +19,14 @@ This package serves two purposes:
 
 ### Installation
 
-You can install mlstabilitytest from [PyPi](https://pypi.org):
+You can install mlstabilitytest by cloning the repository:
 ```
-pip install mlstabilitytest
+git clone https://github.com/CJBartel/TestStabilityML.git
+```
+Then navigating to your cloned directory and installing:
+```
+cd TestStabilityML
+python setup.py install --user
 ```
 
 ### Reproducing published results

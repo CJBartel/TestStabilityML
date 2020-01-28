@@ -39,6 +39,9 @@ class UnitTestStabilityAnalysis(unittest.TestCase):
         mae_new = new_output['stats']['Ef']['abs']['mean']
         end = time()
         print('\n%.2f processor-hours used' % ((end-start)*nprocs/3600))
+        for f in out_files:
+            if os.path.exists(f):
+                os.remove(f)
         self.assertEqual(mae_new, mae_check)
         
 if __name__ == '__main__':

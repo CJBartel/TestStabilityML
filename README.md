@@ -41,7 +41,7 @@ mlstabilitytest/training/
 
 An example script that would re-train all models is provided at:
 ```
-mlstabilitytest/train_all_models.py
+mlstabilitytest/train_models.py
 ```
 Classes that allow for performing the stability analyses with the learned formation energies are provided at:
 ```

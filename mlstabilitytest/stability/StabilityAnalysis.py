@@ -7,8 +7,8 @@ Created on Wed Nov  6 10:49:07 2019
 """
 
 import os
-from mlstabilitytest.utils.CompositionAnalysis import CompositionAnalysis
-from mlstabilitytest.utils.HullAnalysis import AnalyzeHull
+from mlstabilitytest.stability.CompositionAnalysis import CompositionAnalysis
+from mlstabilitytest.stability.HullAnalysis import AnalyzeHull
 from mlstabilitytest.mp_data.data import Ef, mp_LiMnTMO, smact_LiMnTMO, hullin, hullout, spaces
 from mlstabilitytest.stability.utils import read_json, write_json
 import multiprocessing as multip
@@ -32,7 +32,7 @@ def _update_hullin_space(ml, mp_hullin, space):
     ml_space = mp_hullin[space]
     
     for compound in ml_space:
-        if (CompAnalyzer(compound).num_els_in_formula == 1) or (compound not in ml):
+        if (CompositionAnalysis(compound).num_els_in_formula == 1) or (compound not in ml):
             continue
         else:
             ml_space[compound]['E'] = ml[compound]
@@ -68,7 +68,7 @@ def _get_smact_hull_space(compound, mp_spaces):
     Returns:
         relevant chemical space (str) to determine stability compound
     """
-    els = set(CompAnalyzer(compound).els)
+    els = set(CompositionAnalysis(compound).els)
     for s in mp_spaces:
         space_els = set(s.split('_'))
         if (len(els.intersection(space_els)) == 4) and (len(space_els) < 7):
@@ -86,15 +86,15 @@ def _update_smact_space(ml,  mp_hullin, space):
     """
     ml_space = mp_hullin[space]
     for compound in ml_space:
-        if (CompAnalyzer(compound).num_els_in_formula == 1) or (compound not in ml):
+        if (CompositionAnalysis(compound).num_els_in_formula == 1) or (compound not in ml):
             continue
         else:
             ml_space[compound]['E'] = ml[compound]
 
     for compound in ml:
-        if set(CompAnalyzer(compound).els).issubset(set(space.split('_'))):
+        if set(CompositionAnalysis(compound).els).issubset(set(space.split('_'))):
             ml_space[compound] = {'E' : ml[compound],
-                                  'amts' : {el : CompAnalyzer(compound).amt_of_el(el)
+                                  'amts' : {el : CompositionAnalysis(compound).amt_of_el(el)
                                    for el in space.split('_')}}
 
     return ml_space
@@ -139,7 +139,7 @@ class StabilityAnalysis(object):
             os.mkdir(data_dir)
             
         input_data = read_json(os.path.join(data_dir, data_file))
-        input_data = {CompAnalyzer(k).std_formula() : float(input_data[k])
+        input_data = {CompositionAnalysis(k).std_formula() : float(input_data[k])
                         for k in input_data}
         
         if experiment == 'allMP':
@@ -482,7 +482,7 @@ class EdAnalysis(object):
             
         input_data = read_json(os.path.join(data_dir, data_file))
         
-        input_data = {CompAnalyzer(k).std_formula() : float(input_data[k])
+        input_data = {CompositionAnalysis(k).std_formula() : float(input_data[k])
                         for k in input_data}
         
         if experiment == 'allMP':

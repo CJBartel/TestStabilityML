@@ -1,12 +1,13 @@
 import os
-from mlstabilitytest.utils.StabilityAnalysis import StabilityAnalysis, EdAnalysis
+from mlstabilitytest.stability.StabilityAnalysis import StabilityAnalysis, EdAnalysis
 
+here = os.path.abspath(os.path.dirname(__file__))
 def main():
-    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost', 'Deml', 'CGCNN']
+    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost', 
+              'CGCNN']
     experiments = ['LiMnTMO', 'allMP', 'smact']
     training_props = ['Ef', 'Ed']
-    path_to_ml_data = '/Users/chrisbartel/Dropbox/postdoc/projects/ML_H/code/TestStabilityML/mlstabilitytest/ml_data'
-    path_to_ml_data = '/home/cbartel/bin/TestStabilityML/mlstabilitytest/ml_data'
+    path_to_ml_data = os.path.join(here, 'ml_data') 
     for training_prop in training_props:
         print('\n____ models trained on %s ____\n' % training_prop)
         for experiment in experiments:

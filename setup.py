@@ -19,7 +19,7 @@ URL = 'https://github.com/CJBartel/TestStabilityML'
 EMAIL = 'bartel.chrisj@gmail.com'
 AUTHOR = 'Chris Bartel'
 REQUIRES_PYTHON = '>=3.6.0'
-VERSION = '0.1.0'
+VERSION = '0.2.0'
 
 REQUIRED = ['numpy', 
             'scipy',

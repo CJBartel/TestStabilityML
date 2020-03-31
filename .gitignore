@@ -23,3 +23,7 @@ mlstabilitytest/change_dir_names.py
 mlstabilitytest/sub.sh
 mlstabilitytest/log.*
 *__pycache__*
+mlstabilitytest/apriori_stability.py
+mlstabilitytest/data/
+mlstabilitytest/training/learning/
+mlstabilitytest/ml_data/Ef/allMP/*/tmp*.json

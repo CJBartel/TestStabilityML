@@ -15,6 +15,7 @@ import multiprocessing as multip
 from time import time
 from sklearn.metrics import confusion_matrix, r2_score
 import numpy as np
+import random
         
 def _update_hullin_space(ml, mp_hullin, space):
     """
@@ -152,6 +153,9 @@ class StabilityAnalysis(object):
             mp = mp_LiMnTMO()
             smact = smact_LiMnTMO()
             compounds = list(set(list(mp.keys()) + smact['smact']))
+        elif experiment == 'random':
+            mp = Ef()
+            compounds = list(mp.keys())            
         else:
             raise NotImplementedError
                     
@@ -161,6 +165,10 @@ class StabilityAnalysis(object):
             raise AssertionError
             
         input_data = {c : input_data[c] for c in compounds}
+        
+        if experiment == 'random':
+            errors = [mp[c] - input_data[c] for c in input_data]
+            input_data = {c : mp[c]+random.choice(errors) for c in input_data}
             
         self.compounds = compounds
         

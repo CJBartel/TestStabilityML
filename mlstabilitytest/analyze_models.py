@@ -6,13 +6,9 @@ here = os.path.abspath(os.path.dirname(__file__))
 def main():
     models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost', 
               'CGCNN']
-    """
-    experiments = ['LiMnTMO', 'allMP', 'smact']
+    experiments = ['LiMnTMO', 'allMP', 'smact',
+                   'random1', 'random2', 'random3']
     training_props = ['Ef', 'Ed']
-    """
-    experiments = ['random1', 'random2', 'random3']
- #   experiments = experiments[::-1]
-    training_props = ['Ef']
     path_to_ml_data = os.path.join(here, 'ml_data') 
     for training_prop in training_props:
         print('\n____ models trained on %s ____\n' % training_prop)
@@ -39,6 +35,9 @@ def process(training_prop, model, experiment, path_to_ml_data):
     """
     if (model == 'CGCNN') and (experiment == 'smact'):
         print('CGCNN cannot be applied directly to the SMACT problem because the structures are not known')
+        return
+    if ('random' in experiment) and (training_prop == 'Ed'):
+        print('Random perturbations only apply to models trained on Ef as written')
         return
     data_dir = os.path.join(path_to_ml_data, training_prop, experiment, model)
     if not os.path.exists(data_dir):

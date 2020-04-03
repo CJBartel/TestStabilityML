@@ -138,8 +138,9 @@ class StabilityAnalysis(object):
         
         if not os.path.exists(data_dir):
             os.mkdir(data_dir)
-            
-        input_data = read_json(os.path.join(data_dir, data_file))
+
+        finput = os.path.join(data_dir, data_file)
+        input_data = read_json(finput)
         input_data = {CompositionAnalysis(k).std_formula() : float(input_data[k])
                         for k in input_data}
         
@@ -153,7 +154,7 @@ class StabilityAnalysis(object):
             mp = mp_LiMnTMO()
             smact = smact_LiMnTMO()
             compounds = list(set(list(mp.keys()) + smact['smact']))
-        elif experiment == 'random':
+        elif 'random' in experiment:
             mp = Ef()
             compounds = list(mp.keys())            
         else:
@@ -166,9 +167,12 @@ class StabilityAnalysis(object):
             
         input_data = {c : input_data[c] for c in compounds}
         
-        if experiment == 'random':
-            errors = [mp[c] - input_data[c] for c in input_data]
-            input_data = {c : mp[c]+random.choice(errors) for c in input_data}
+        if 'random' in experiment:
+            random.seed(int(experiment.split('random')[1]))
+            errors = [mp[c]['Ef'] - input_data[c] for c in compounds]
+            random.shuffle(errors)
+            input_data = {compounds[i] : float(mp[compounds[i]]['Ef']+errors[i]) for i in range(len(errors))}
+            input_data = write_json(input_data, finput)
             
         self.compounds = compounds
         

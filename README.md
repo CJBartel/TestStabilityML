@@ -88,3 +88,6 @@ mlstabilitytest/analyze_models.py
     ```
     mlstability.stability.StabilityAnalysis.StabilityAnalysis 
     ```
+
+### Fluidity of Materials Project
+Please note that the Materials Project database is constantly changing. While this doesn't present any issues for the direct replication of our results or the application of new models trained on formation energy, it may complicate the strict replication of our results for models trained on multiple properties (e.g., band gap and formation energy simultaneously).

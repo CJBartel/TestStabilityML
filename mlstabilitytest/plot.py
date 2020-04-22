@@ -81,6 +81,8 @@ def main():
         make_table1('Ef')
     if remake_tableS1:
         make_table1('Ed')
+        
+    make_schematic2()
     return
 
 def tableau_colors():
@@ -747,8 +749,236 @@ def ax_LiMnTMO(training_prop, model, show_xlabel, show_ylabel, show_model=True, 
                        horizontalalignment='center',
                        verticalalignment='bottom')
     return ax
-    
+
 def make_fig1():
+    
+    
+    fig = plt.figure(figsize=(12, 3.7))
+    #fig = plt.figure(figsize=(7,7))
+    from matplotlib import gridspec
+    
+    #make outer gridspec
+    gs = gridspec.GridSpec(nrows=2, 
+                           ncols=4, 
+                           figure=fig, 
+                           width_ratios= [1, 0.5, 1, 0.2],
+                           height_ratios=[0.2, 1],
+                           wspace=0.0,
+                           hspace=0.0)
+    
+    ax1 = fig.add_subplot(gs[:, 0])
+    
+    xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
+    xlim = (0, 1)
+    ylim = (-1, 0)
+    yticks = (-1, -0.8, -0.6, -0.4, -0.2, 0)
+    xlabel = r'$x\/in\/A_{1-x}B_x$'
+    ylabel = r'$\Delta$' + r'$\it{H}$' + r'$_{f}$' + r'$\/(\frac{energy}{atom})$'
+    
+    x_stable = [0, 1/3, 0.75, 1]
+    y_stable = [0, -0.8, -0.9, 0]
+    x_unstable = [0.2]
+    y_unstable = [-0.2]
+    
+    x_imag = [1/3, 1]
+    y_imag = [-0.8, 0]
+    
+    colors = tableau_colors()
+    
+    m_size = 8
+    c_stable, mfc_stable, mec_stable = colors['blue'], 'white', colors['blue']
+    m_stable = 'o'
+    lw_stable, ls_stable = 1.5, '-'
+    ax1 = plt.plot(x_stable, y_stable,
+                  color=c_stable,
+                  markerfacecolor=mfc_stable,
+                  markeredgecolor=mec_stable,
+                  marker=m_stable,
+                  lw=lw_stable,
+                  ls=ls_stable,
+                  label='stable',
+                  markersize=m_size)
+
+    c_unstable, mfc_unstable, mec_unstable = colors['red'], 'white', colors['red']
+    m_unstable = 's'
+    lw_unstable, ls_unstable = 0, '-'    
+    ax1 = plt.plot(x_unstable, y_unstable,
+                  color=c_unstable,
+                  markerfacecolor=mfc_unstable,
+                  markeredgecolor=mec_unstable,
+                  marker=m_unstable,
+                  lw=lw_unstable,
+                  ls=ls_unstable,
+                  label='unstable',
+                  markersize=m_size)
+    
+    ax1 = plt.plot(x_imag, y_imag,
+                  color='black',
+                  markerfacecolor=mfc_stable,
+                  markeredgecolor=mec_stable,
+                  marker=m_stable,
+                  lw=1,
+                  ls='--',
+                  label='__nolegend__',
+                  markersize=m_size) 
+    
+    Hd_font = 18
+    ax1 = plt.arrow(1/5, -0.8/(1/3)*0.2, 0, abs(-0.2--0.8/(1/3)*0.2)-0.025,
+                   length_includes_head=True,
+                   head_width=0.01,
+                   head_length=0.02,
+                   zorder=0,
+                   color='black',
+                   ls='solid',
+                   lw=1)
+    ax1 = plt.text(0.21, -0.4, 
+                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,A_4B}$',
+                  verticalalignment='bottom',
+                  color=c_unstable,
+                  fontsize=Hd_font)
+    ax1 = plt.text(0.74, -0.7, 
+                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,AB_3}$',
+                  verticalalignment='bottom',
+                  horizontalalignment='right',
+                  color=c_stable,
+                  fontsize=Hd_font)
+    
+    ax1 = plt.arrow(0.75, -0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.005, 0, -0.9-(-0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.03),
+                   length_includes_head=True,
+                   head_width=0.01,
+                   head_length=0.02,
+                   zorder=0,
+                   color='black',
+                   ls='solid',
+                   lw=1)
+    
+    ax1 = plt.legend(loc='lower left')
+    ax1 = plt.xlabel(xlabel)
+    ax1 = plt.ylabel(ylabel)
+    ax1 = plt.xticks(xticks)
+    ax1 = plt.yticks(yticks)
+    ax1 = plt.gca().yaxis.set_ticklabels([])
+
+    ax1 = plt.xlim(xlim)
+    ax1 = plt.ylim(ylim)
+    
+    """
+    ax1 = plt.text(0, 0.05, 'A', horizontalalignment='center')
+    ax1 = plt.text(1, 0.05, 'B', horizontalalignment='center')  
+
+    """
+    ax2 = fig.add_subplot(gs[:, 1])
+    ax2 = plt.gca().set_visible(False)
+
+    ax3 = fig.add_subplot(gs[1, 2])
+
+
+    
+    d = hullout()
+    x, y = [d[c]['Ef'] for c in d], [d[c]['Ed'] for c in d]
+    alpha = 0.1
+    marker = 'o'
+    lw = 0
+    s = 10
+    stable_c = tableau_colors()['blue']
+    unstable_c = tableau_colors()['red']
+    colors = [stable_c if y[i] < 0 else unstable_c for i in range(len(y))]
+    edgecolors = None
+    vmin, vmax, cmap, cmap_values = False, False, False, False
+    xticks = (True, [-5, -4, -3, -2, -1, 0, 1, 2])
+    yticks = (True, [-1, -0.5, 0, 0.5, 1])
+    xlabel = r'$\Delta$' + r'$\it{H}$' + r'$_f$' + r'$\/(\frac{eV}{atom})$'
+    ylabel = xlabel.replace('_f', '_d')
+    xlim = (-5, 1)
+    ylim = (-1, 1)
+    diag = False
+    ax3 = ax_generic_scatter(x, y, 
+                            alpha=alpha,
+                            marker=marker,
+                            lw=lw,
+                            s=s,
+                            colors=colors,
+                            edgecolors=edgecolors,
+                            vmin=vmin,
+                            vmax=vmax,
+                            cmap=cmap,
+                            cmap_values=cmap_values,
+                            xticks=xticks,
+                            yticks=yticks,
+                            xlabel=xlabel,
+                            ylabel=ylabel,
+                            xlim=xlim,
+                            ylim=ylim,
+                            diag=diag)
+    
+    ax3 = plt.plot(xlim, [0, 0], lw=1, ls='--', color='black')
+    ax3 = plt.text(-4.9, -0.9, 'stable', color=stable_c)
+    ax3 = plt.text(-4.9, 0.9, 'unstable', color=unstable_c, verticalalignment='top')
+    
+    indices = [i for i in range(len(x)) if x[i] != y[i]]
+    x, y = [x[i] for i in indices], [y[i] for i in indices]
+    m, b, r, p, s = linregress(x, y)
+    
+    fake_x = np.linspace(xlim[0], xlim[1], 1000)
+    fake_y = [m*v+b for v in fake_x]
+    ax3 = plt.plot(fake_x, fake_y, lw=1, ls='-', color=tableau_colors()['gray'])
+    ax3 = plt.text(-4.95, -0.12, r'$R^2\/=\/%.2f$' % r**2, color=tableau_colors()['gray'], 
+                  horizontalalignment='left', verticalalignment='top', fontsize=18)
+    
+    x, y = [d[c]['Ef'] for c in d], [d[c]['Ed'] for c in d]
+
+    bin_step = 0.01
+    ax4 = fig.add_subplot(gs[1, 3])
+    n, bins, patches = plt.hist(y, 
+                   bins=int((ylim[1]-ylim[0])/bin_step), 
+                   orientation='horizontal', 
+                   color=tableau_colors()['purple'],
+                   density=True,
+                   zorder=0)
+    ax4 = plt.xticks([], [])
+    ax4 = plt.gca().xaxis.set_ticklabels([])
+    ax4 = plt.yticks(yticks[1])
+    ax4 = plt.gca().yaxis.set_ticklabels([])
+    ax4 = plt.gca().tick_params(top=False, left=True, right=False, bottom=False, direction='in')
+    ax4 = plt.xlim([0, max(n)])
+
+    ax4 = plt.ylim(ylim)
+    ax4 = plt.gca().spines['left'].set_visible(True)
+    ax4 = plt.gca().spines['right'].set_visible(False)
+    ax4 = plt.gca().spines['top'].set_visible(False)
+    ax4 = plt.gca().spines['bottom'].set_visible(False)
+    
+    ax5 = fig.add_subplot(gs[0, 2])
+    n, bins, patches = plt.hist(x, 
+                   bins=int((ylim[1]-ylim[0])/bin_step), 
+                   color=tableau_colors()['purple'],
+                   density=True, zorder=0)
+    ax5 = plt.xticks(xticks[1])
+    ax5 = plt.gca().xaxis.set_ticklabels([])
+    ax5 = plt.yticks()
+    ax5 = plt.gca().yaxis.set_ticklabels([])
+    ax5 = plt.xlim(xlim)
+    ax5 = plt.ylim([0, max(n)])
+    ax5 = plt.gca().spines['left'].set_visible(False)
+    ax5 = plt.gca().spines['right'].set_visible(False)
+    ax5 = plt.gca().spines['top'].set_visible(False)
+    ax5 = plt.gca().spines['bottom'].set_visible(True)
+    ax5 = plt.gca().tick_params(top=False, left=False, right=False, bottom=True, direction='in')
+
+
+    ax5 = plt.text(-15, 0.7, 'a', weight='bold')
+    ax5 = plt.text(-7, 0.7, 'b', weight='bold')
+    
+    
+    plt.show()
+    
+    
+    #plt.subplots_adjust(wspace=0.2)
+    fig.savefig(os.path.join(FIG_DIR, 'Fig1.png'))
+    
+
+    
+def make_fig1_old():
     fig = plt.figure(figsize=(12, 3.5))
     ax1 = plt.subplot(121)
     xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
@@ -848,7 +1078,7 @@ def make_fig1():
     ax1 = plt.text(0, 0.05, 'A', horizontalalignment='center')
     ax1 = plt.text(1, 0.05, 'B', horizontalalignment='center')    
 
-    ax2 = plt.subplot(122)
+    ax2 = plt.subplot(132)
     
     d = hullout()
     x, y = [d[c]['Ef'] for c in d], [d[c]['Ed'] for c in d]
@@ -901,9 +1131,16 @@ def make_fig1():
     ax2 = plt.text(-4.95, -0.12, r'$R^2\/=\/%.2f$' % r**2, color=tableau_colors()['gray'], 
                   horizontalalignment='left', verticalalignment='top', fontsize=18)
 
-    ax2 = plt.text(-15, 1.25, 'a', weight='bold')
-    ax2 = plt.text(-7, 1.25, 'b', weight='bold')
-    ax2 = plt.subplots_adjust(wspace=0.45)
+    
+    """
+    ax3 = plt.subplot(133)
+    ax3 = make_figS1(True)
+    """
+
+
+    #ax3 = plt.text(-15, 1.25, 'a', weight='bold')
+    #ax3 = plt.text(-7, 1.25, 'b', weight='bold')
+    #ax2 = plt.subplots_adjust(wspace=0.45)
     fig.savefig(os.path.join(FIG_DIR, 'Fig1.png'))
     plt.show()
     plt.close()
@@ -1176,11 +1413,12 @@ def make_fig7():
     fig.savefig(os.path.join(FIG_DIR, 'Fig7.png'))        
     plt.close()
     
-def make_figS1():
+def make_figS1(ax_it=True):
     compounds = get_compounds('allMP')
     x, y = get_actual('Ef', compounds), get_actual('Ed', compounds)
-    fig = plt.figure()
-    ax = plt.subplot(111)
+    if not ax_it:
+        fig = plt.figure()
+        ax = plt.subplot(111)
     nbins = 85
     alpha=0.5
     norm = True
@@ -1215,6 +1453,8 @@ def make_figS1():
                   label_Hd, 
                   color=tableau_colors()['orange'],
                   horizontalalignment='center')
+    if ax_it:
+        return ax
     plt.show()
     fig.savefig(os.path.join(FIG_DIR, 'FigS1.png'))
     plt.close()    
@@ -1257,6 +1497,414 @@ def make_table1(training_prop):
     name = 'Table1' if training_prop == 'Ef' else 'TableS1'
     with open(os.path.join(FIG_DIR, name), 'w') as f:
         f.write(str(x))
+        
+def make_rand_schematic():
+    fig = plt.figure(figsize=(15,  3.5))
+    ax1 = plt.subplot(131)
+    training_prop = 'Ef'
+    prop = 'Ef'
+    experiment = 'allMP'
+    compounds = get_compounds(experiment)
+    model = 'ElFrac'
+    actual, pred = get_actual(training_prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
+    #mae = get_mae(actual, pred)
+    ax1 = ax_actual_vs_pred(actual, pred, prop,
+                            exp=experiment,
+                            show_xticks=True, show_yticks=True,
+                            show_xlabel=True, show_ylabel=True,
+                            show_mae=False, show_model=False)
+    
+    ax2 = plt.subplot(132)
+    resid = [actual[i] - pred[i] for i in range(len(actual))]
+    # This is  the colormap I'd like to use.
+    #cm = plt.cm.get_cmap(cmap)
+    
+    xlim = (-1, 1)
+    # Plot histogram.
+    norm = mpl.colors.Normalize(vmin=0,vmax=1.)
+    #cmap = 'plasma_r'
+    #cm = plt.cm.get_cmap(cmap)
+
+    N, bins, patches = plt.hist(resid, 
+                                bins=int((xlim[1]-xlim[0])/0.01), 
+                                density=True, 
+                                stacked=True, 
+                                align='mid')
+    
+    norm = mpl.colors.Normalize(0, 1)
+    # set a color for every bar (patch) according 
+    # to bin value  normalized min-max interval
+    for b, patch in zip(bins, patches):
+        color = mpl.cm.plasma_r(norm(abs(b)))
+        patch.set_facecolor(color)
+
+    ax2 = plt.xlabel(r'$\Delta$' + r'$\it{H}$' + r'$_{f,MP}$' + r'$-$'+r'$\Delta$' + r'$\it{H}$' + r'$_{f,pred}$'+' ' + r'$\/(\frac{energy}{atom})$')
+    ax2 = plt.xlim(xlim)
+    ax2 = plt.yticks([], [])
+    ax2 = plt.ylabel('Error distribution, '+r'$\it{P}$')    
+    
+    ax4 = plt.subplot(133)
+    
+    xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
+    xlim = (0, 1)
+    ylim = (-1, 0)
+    yticks = (-1, -0.8, -0.6, -0.4, -0.2, 0)
+    xlabel = r'$x\/in\/A_{1-x}B_x$'
+    ylabel = r'$\Delta$' + r'$\it{H}$' + r'$_{f,rand}$' + r'$\/(\frac{eV}{atom})$'
+    
+    x_stable = [0, 1/3, 0.75, 1]
+    y_stable = [0, -0.8, -0.9, 0]
+    x_unstable = [0.2]
+    y_unstable = [-0.2]
+    
+    x_imag = [1/3, 1]
+    y_imag = [-0.8, 0]
+    
+    colors = tableau_colors()
+    
+    m_size = 8
+    c_stable, mfc_stable, mec_stable = colors['blue'], 'white', colors['blue']
+    m_stable = 'o'
+    lw_stable, ls_stable = 1.5, '-'
+    ax1 = plt.plot(x_stable, y_stable,
+                  color=c_stable,
+                  markerfacecolor=mfc_stable,
+                  markeredgecolor=mec_stable,
+                  marker=m_stable,
+                  lw=lw_stable,
+                  ls=ls_stable,
+                  label='stable',
+                  markersize=m_size)
+
+    c_unstable, mfc_unstable, mec_unstable = colors['red'], 'white', colors['red']
+    m_unstable = 's'
+    lw_unstable, ls_unstable = 0, '-'    
+    ax4 = plt.plot(x_unstable, y_unstable,
+                  color=c_unstable,
+                  markerfacecolor=mfc_unstable,
+                  markeredgecolor=mec_unstable,
+                  marker=m_unstable,
+                  lw=lw_unstable,
+                  ls=ls_unstable,
+                  label='unstable',
+                  markersize=m_size)
+    
+    ax4 = plt.plot(x_imag, y_imag,
+                  color='black',
+                  markerfacecolor=mfc_stable,
+                  markeredgecolor=mec_stable,
+                  marker=m_stable,
+                  lw=1,
+                  ls='--',
+                  label='__nolegend__',
+                  markersize=m_size) 
+    
+    Hd_font = 18
+    ax4 = plt.arrow(1/5, -0.8/(1/3)*0.2, 0, abs(-0.2--0.8/(1/3)*0.2)-0.025,
+                   length_includes_head=True,
+                   head_width=0.01,
+                   head_length=0.02,
+                   zorder=0,
+                   color='black',
+                   ls='solid',
+                   lw=1)
+    ax4 = plt.text(0.21, -0.4, 
+                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,rand}$',
+                  verticalalignment='bottom',
+                  color=c_unstable,
+                  fontsize=Hd_font)
+    
+    ax4 = plt.text(0.74, -0.7, 
+                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,rand}$',
+                  verticalalignment='bottom',
+                  horizontalalignment='right',
+                  color=c_stable,
+                  fontsize=Hd_font)
+    
+    
+    ax4 = plt.arrow(0.75, -0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.005, 0, -0.9-(-0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.03),
+                   length_includes_head=True,
+                   head_width=0.01,
+                   head_length=0.02,
+                   zorder=0,
+                   color='black',
+                   ls='solid',
+                   lw=1)
+    
+    ax4 = plt.legend(loc='lower left')
+    ax4 = plt.xlabel(xlabel)
+    ax4 = plt.ylabel(ylabel)
+    ax4 = plt.xticks(xticks)
+    ax4 = plt.yticks(yticks)
+    ax4 = plt.gca().yaxis.set_ticklabels([])
+
+    ax4 = plt.xlim(xlim)
+    ax4 = plt.ylim(ylim) 
+
+    
+    
+    plt.subplots_adjust(wspace=0.4)
+    
+    fig.savefig(os.path.join(FIG_DIR, 'tmp.png'))
+    
+def get_rand_stats(d):
+    Ef_MAE = d['stats']['Ef']['abs']['mean']
+    Ed_MAE = d['stats']['Ed']['reg']['abs']['mean']
+    acc = d['stats']['Ed']['cl']['0']['scores']['accuracy']
+    f1 = d['stats']['Ed']['cl']['0']['scores']['f1']
+    fpr = d['stats']['Ed']['cl']['0']['scores']['fpr']
+    
+    return {'Ef_MAE' : Ef_MAE,
+            'Ed_MAE' : Ed_MAE,
+            'acc' : acc,
+            'f1' : f1,
+            'fpr': fpr}
+    
+    
+def process_rand(model):
+    d1, d2, d3 = get_results('Ef', 'random1', model), get_results('Ef', 'random2', model), get_results('Ef', 'random3', model)
+    
+    random_ds = [d1, d2, d3]
+    actual = get_results('Ef', 'allMP', model)
+    
+    stats = {'actual' : get_rand_stats(actual)}
+    for i in range(len(random_ds)):
+        stats['random%s' % str(i+1)] = get_rand_stats(random_ds[i])
+        
+    stats['summary'] = {prop : 
+                        {'mean' : 
+                            np.mean([stats['random%s' % str(i+1)][prop] for i in range(3)]),
+                         'std' : np.std([stats['random%s' % str(i+1)][prop] for i in range(3)])}
+                            for prop in stats['actual']}
+                            
+    return stats
+        
+    
+    
+    
+def make_schematic2():
+
+
+    fig = plt.figure(figsize=(13, 3.7))
+    #fig = plt.figure(figsize=(7,7))
+    from matplotlib import gridspec
+    
+    #make outer gridspec
+    gs = gridspec.GridSpec(nrows=1, 
+                           ncols=2, 
+                           figure=fig, 
+                           width_ratios= [1, 1.3],
+                           height_ratios=[1],
+                           wspace=0.35,
+                           hspace=0.0)
+    
+    ax1 = fig.add_subplot(gs[0, 0])
+    
+    xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
+    xlim = (0, 1)
+    ylim = (-1.1, 0)
+    yticks = (-1, -0.8, -0.6, -0.4, -0.2, 0)
+    xlabel = r'$x\/in\/A_{1-x}B_x$'
+    ylabel = r'$\Delta$' + r'$\it{H}$' + r'$_{f}$' + r'$\/(\frac{eV}{atom})$'
+    
+    x = [0, 1/3, 0.75, 1]
+    y_real = [0, -0.8, -0.9, 0]
+    delta = 0.15
+    y_rand = [0, y_real[1]-1.5*delta,  y_real[2]+0.5*delta, 0]
+    y_cancel = [0, y_real[1]+delta,  y_real[2]+delta, 0]
+    
+    colors = tableau_colors()
+    
+    m_size = 8
+    c_real, mfc_real, mec_real = colors['blue'], 'white', colors['blue']
+    c_rand, mfc_rand, mec_rand = colors['purple'], 'white', colors['purple']
+    c_cancel, mfc_cancel, mec_cancel = colors['green'], 'white', colors['green']
+
+    m_real, m_rand, m_cancel = 'o', 'o', 'o'
+    ls_real, ls_rand, ls_cancel = '-', '--', '-.'
+    lw_stable, ls_stable = 1.5, '-'
+    ax1 = plt.plot(x, y_real,
+                  color=c_real,
+                  markerfacecolor=mfc_real,
+                  markeredgecolor=mec_real,
+                  marker=m_real,
+                  lw=lw_stable,
+                  ls=ls_real,
+                  label='ground truth',
+                  markersize=m_size,
+                  zorder=100)
+    
+    ax1 = plt.plot(x, y_rand,
+                  color=c_rand,
+                  markerfacecolor=mfc_rand,
+                  markeredgecolor=mec_rand,
+                  marker=m_rand,
+                  lw=lw_stable,
+                  ls=ls_rand,
+                  label='random',
+                  markersize=m_size)
+    
+    ax1 = plt.plot(x, y_cancel,
+                  color=c_cancel,
+                  markerfacecolor=mfc_cancel,
+                  markeredgecolor=mec_cancel,
+                  marker=m_cancel,
+                  lw=lw_stable,
+                  ls=ls_cancel,
+                  label='systematic',
+                  markersize=m_size)
+    
+    ax1 = plt.xticks(xticks)
+    ax1 = plt.yticks(yticks, [])
+    
+    label_font = 18
+    ax1 = plt.text(0.75, -1.02, 'ground-truth',
+                   color=c_real,
+                   fontsize=label_font,
+                   horizontalalignment='center',
+                   verticalalignment='bottom')
+    ax1 = plt.text(0.16, -1.09, 'random\nerror',
+                   color=c_rand,
+                   fontsize=label_font,
+                   horizontalalignment='center',
+                   verticalalignment='bottom')
+    ax1 = plt.text(0.5, -0.65, 'systematic\nerror',
+                   color=c_cancel,
+                   fontsize=label_font,
+                   horizontalalignment='center',
+                   verticalalignment='bottom')
+    
+    ax1 = plt.xlabel(xlabel)
+    ax1 = plt.ylabel(ylabel)
+
+    #ax1 = plt.legend()
+   
+    ax1 = plt.ylim(ylim)
+    ax1 = plt.xlim(xlim)    
+    
+    ax2 = fig.add_subplot(gs[0, 1])
+    
+    
+    models = ['ElFrac', 'Meredig', 'Magpie',
+              'AutoMat', 'ElemNet', 'Roost',
+              'CGCNN']
+    
+    model_stats = {m : process_rand(m) for m in models}
+    
+    actual_mae = [model_stats[m]['actual']['Ed_MAE'] for m in models]
+    actual_f1 = [model_stats[m]['actual']['f1'] for m in models]
+    rand_mae = [model_stats[m]['summary']['Ed_MAE']['mean'] for m in models]
+    rand_mae_err = [model_stats[m]['summary']['Ed_MAE']['std'] for m in models]
+    print(rand_mae_err)
+    rand_f1 = [model_stats[m]['summary']['f1']['mean'] for m in models]
+    rand_f1_err = [model_stats[m]['summary']['f1']['std'] for m in models]
+    print(rand_f1_err)
+    
+    hatch = '//'
+    bar_width = 0.15
+    xpos_center = list(range(len(models)))
+    
+    xpos_actual_mae = [xpos - 1.7*bar_width for xpos in xpos_center]
+    xpos_rand_mae = [xpos + bar_width for xpos in xpos_actual_mae]
+    
+    xpos_actual_f1 = [xpos + 1.3*bar_width for xpos in xpos_rand_mae]
+    xpos_rand_f1 = [xpos + bar_width for xpos in xpos_actual_f1]
+    
+    mae_color = colors['purple']
+    mae_color = 'black'
+    f1_color = colors['brown']
+    
+    
+    rand_lw = 1
+    
+    ax2 = plt.bar(xpos_actual_mae, actual_mae, 
+                  width=bar_width,
+                  color=mae_color)
+    ax2 = plt.bar(xpos_rand_mae, rand_mae, 
+                  edgecolor=mae_color,
+                  width=bar_width,
+                  color=mae_color,
+                  lw=rand_lw,
+                  hatch=hatch,
+                  fill=False,
+                  yerr=np.array(rand_mae_err))
+
+
+    leg_color = colors['gray']
+    ax2 = plt.bar([1, 2], [-1, -1], 
+                  width=bar_width,
+                  color=leg_color,
+                  label=r'$\Delta$'+r'$\it{H}$'+r'$_{f}$'+' = '+r'$\Delta$'+r'$\it{H}$'+r'$_{f,pred}$')
+    long_label = r'$\Delta$'+r'$\it{H}$'+r'$_{f}$'+' = '+r'$\Delta$'+r'$\it{H}$'+r'$_{f,MP}$'+'+'+r'$\it{P}$'+'['+r'$\Delta$'+r'$\it{H}$'+r'$_{f,MP}$'+r'$-$'+r'$\Delta$'+r'$\it{H}$'+r'$_{f,pred}$'+']'
+    short_label = r'$\Delta$'+r'$\it{H}$'+r'$_{f}$'+' = '+r'$\Delta$'+r'$\it{H}$'+r'$_{f,rand}$'
+    ax2 = plt.bar([1, 2], [-1, -1], 
+                  edgecolor=leg_color,
+                  width=bar_width,
+                  color=leg_color,
+                  lw=rand_lw,
+                  label=short_label,
+                  hatch=hatch,
+                  fill=False)
+    ax2 = plt.legend(loc='upper center', fontsize=16)
+
+    
+    ax2 = plt.gca().spines['left'].set_color(mae_color)
+    ax2 = plt.gca().yaxis.label.set_color(mae_color)
+    ax2 = plt.gca().tick_params(axis='y', colors=mae_color)
+    
+    ax2 = plt.ylabel(r'$\Delta$' + r'$\it{H}$' + r'$_{d}$' + ' MAE' + r'$\/(\frac{eV}{atom})$')
+    ax2 = plt.ylim((0, 0.4))
+    
+    xtick_font = 16
+    ax2 = plt.xticks(xpos_center, models, rotation=45, fontsize=xtick_font)
+    
+    ax3 = plt.gca().twinx()
+
+    
+    ax3 = plt.bar(xpos_actual_f1, actual_f1, 
+                  width=bar_width,
+                  color=f1_color)
+    ax3 = plt.bar(xpos_rand_f1, rand_f1, 
+                  edgecolor=f1_color,
+                  width=bar_width,
+                  color=f1_color,
+                  lw=rand_lw,
+                  hatch=hatch,
+                  fill=False,
+                  yerr=np.array(rand_f1_err)    )
+    ax3 = plt.gca().spines['right'].set_color(f1_color)
+    ax3 = plt.gca().yaxis.label.set_color(f1_color)
+    ax3 = plt.gca().tick_params(axis='y', colors=f1_color)
+    ax3 = plt.ylim((0, 1))
+
+    
+    ax3 = plt.ylabel(r'$F_1\/score$')
+    
+    
+    ax3 = plt.text(-9.35, 1.1, 'a', weight='bold')
+    ax3 = plt.text(-2.3, 1.1, 'b', weight='bold')
+
+
+    
+    
+    
+    for m in models:
+        print('\n')
+        print(m)
+        
+        stats = process_rand(m)
+        
+        for prop in ['Ed_MAE', 'acc', 'f1', 'fpr']:
+            print('%s: actual = %.3f; rand = %.3f' % (prop, stats['actual'][prop], stats['summary'][prop]['mean']))
+            if prop in ['Ed_MAE', 'fpr']:
+                per_improve = 1 - stats['actual'][prop] / stats['summary'][prop]['mean']
+            else:
+                per_improve = 1 -  stats['summary'][prop]['mean'] / stats['actual'][prop]
+            print('\timprovement = %.2f' % (100*per_improve))
+            
+            
+            
+    fig.savefig(os.path.join(FIG_DIR, 'Fig8.png'))
         
 if __name__ == '__main__':
     main()

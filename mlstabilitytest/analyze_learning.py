@@ -32,7 +32,6 @@ def get_model_summary(model, training_amt):
                          'ml_input.json')
     d = read_json(fjson)
     
-    
     out = {}
     for split in splits:
         data = d[str(split)]
@@ -51,6 +50,7 @@ def get_model_summary(model, training_amt):
                         'std' : np.std([out[i]['abs']['mean'] for i in out])}}
     return summary
 
+"""
 def get_compoundwise_model_summary(model, training_amt):
     
     print(model)
@@ -79,20 +79,20 @@ def get_compoundwise_model_summary(model, training_amt):
         
         
     return np.mean(list(out.values()))
-    
+"""
+ 
 def main():
-    
     out1 = {model : {training_amt : get_model_summary(model, training_amt) 
                     for training_amt in training_amts}
                     for model in models}  
-
+"""
     out2 = {model : {training_amt : get_compoundwise_model_summary(model, training_amt) 
                     for training_amt in training_amts}
                     for model in models}  
             
                 
-        
-    return out1, out2
+"""     
+    return out1
 
 if __name__ == '__main__':
     out1, out2 = main()

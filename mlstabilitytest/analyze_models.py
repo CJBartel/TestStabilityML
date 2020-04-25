@@ -7,7 +7,8 @@ def main():
     models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost', 
               'CGCNN']
     experiments = ['LiMnTMO', 'allMP', 'smact',
-                   'random1', 'random2', 'random3']
+                   'random1', 'random2', 'random3',
+                   'classifier']
     training_props = ['Ef', 'Ed']
     path_to_ml_data = os.path.join(here, 'ml_data') 
     for training_prop in training_props:
@@ -15,8 +16,9 @@ def main():
         for experiment in experiments:
             print('\n ~~~ %s ~~~\n' % experiment)
             experiment_dir = os.path.join(path_to_ml_data, training_prop, experiment)
-            if not os.path.exists(experiment_dir):
-                os.mkdir(experiment_dir)
+            if (('random' not in experiment) and (training_prop == 'Ed')) or ((experiment != 'classifier') and (training_prop == 'Ef')):
+                if not os.path.exists(experiment_dir):
+                    os.mkdir(experiment_dir)
             for model in models:
                 print('\n %s ' % model)
                 process(training_prop, model, experiment, path_to_ml_data)
@@ -39,6 +41,12 @@ def process(training_prop, model, experiment, path_to_ml_data):
     if ('random' in experiment) and (training_prop == 'Ed'):
         print('Random perturbations only apply to models trained on Ef as written')
         return
+    if (experiment == 'classifier') and (training_prop == 'Ef'):
+        print('Classifier experiment only applies to training on Ed')
+        return
+    if (model == 'CGCNN') and (training_prop == 'Ed'):
+        print('CGCNN not trained on Ed')
+        return
     data_dir = os.path.join(path_to_ml_data, training_prop, experiment, model)
     if not os.path.exists(data_dir):
         os.mkdir(data_dir)
@@ -56,7 +64,7 @@ def process(training_prop, model, experiment, path_to_ml_data):
         obj = StabilityAnalysis(data_dir,
                                 data_file,
                                 experiment,
-                                nprocs=4)
+                                nprocs=nprocs)
     elif training_prop == 'Ed':
         obj = EdAnalysis(data_dir,
                          data_file,

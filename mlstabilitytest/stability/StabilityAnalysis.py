@@ -156,7 +156,7 @@ class StabilityAnalysis(object):
             compounds = list(set(list(mp.keys()) + smact['smact']))
         elif 'random' in experiment:
             mp = Ef()
-            compounds = list(mp.keys())            
+            compounds = list(mp.keys())
         else:
             raise NotImplementedError
                     
@@ -507,6 +507,9 @@ class EdAnalysis(object):
             mp = mp_LiMnTMO()
             smact = smact_LiMnTMO()
             compounds = list(set(list(mp.keys()) + smact['smact']))
+        elif experiment == 'classifier':
+            mp = Ef()
+            compounds = list(mp.keys())
         else:
             raise NotImplementedError
                     
@@ -544,8 +547,8 @@ class EdAnalysis(object):
         ml_in = self.input_data
         compounds = self.compounds
         return {c : {'Ef' : None,
-                     'Ed' : ml_in[c],
-                     'stability' : True if ml_in[c] <= 0 else False,
+                     'Ed' : -1 if ml_in[c] >= 0.5 else 1,
+                     'stability' : True if ml_in[c] >= 0.5 else False,
                      'rxn' : None} for c in compounds}
         
     def results(self, remake=False):
@@ -578,7 +581,8 @@ class EdAnalysis(object):
         results = {'stats' : {'Ed' : obj.stats_Ed},
                    'data' : {'Ed' : obj.Ed['pred'],
                              'formulas' : obj.formulas}}
-    
+        if self.experiment == 'classifier':
+            del results['stats']['Ed']['reg']
         end = time()
         print('Writing to %s.' % fjson)
         print('Time elapsed = %.0f s.' % (end-start))
@@ -600,8 +604,10 @@ class EdAnalysis(object):
         start = time()
         print('\nSummarizing performance...')
         
-        Ed_MAE = results['stats']['Ed']['reg']['abs']['mean']
-        
+        if self.experiment != 'classifier':
+            Ed_MAE = results['stats']['Ed']['reg']['abs']['mean']
+        else:
+            Ed_MAE = np.nan
         tp, fp, tn, fn = [results['stats']['Ed']['cl']['0']['raw'][num] for num in ['tp', 'fp', 'tn', 'fn']]
         prec, recall, acc, f1 = [results['stats']['Ed']['cl']['0']['scores'][score] for score in ['precision', 'recall', 'accuracy', 'f1']]
         fpr = fp/(fp+tn)

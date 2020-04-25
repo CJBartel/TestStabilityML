@@ -13,6 +13,8 @@ import os
 import numpy as np
 from scipy.stats import linregress
 from prettytable import PrettyTable
+from matplotlib import gridspec
+
 
 this_dir, this_filename = os.path.split(__file__)
 FIG_DIR = os.path.join(this_dir, 'figures')
@@ -27,15 +29,17 @@ def main():
     remake_fig3 = False
     remake_fig4 = False
     remake_fig5 = False
-    remake_table1 = False
+    remake_table1 = True
     remake_fig6 = False
     remake_fig7 = False
+    remake_fig8 = False
     remake_figS1 = False
     remake_figS2 = False
     remake_figS3 = False
     remake_figS4 = False
     remake_figS5 = False
     remake_tableS1 = False
+    remake_tableS2 = False
     
     if regen_all_figures:
         remake_fig1 = True
@@ -51,7 +55,8 @@ def main():
         remake_figS3 = True
         remake_figS4 = True
         remake_figS5 = True
-        remake_tableS1 = True        
+        remake_tableS1 = True
+        remake_tableS2 = True
     
     if remake_fig1:
         make_fig1()
@@ -67,22 +72,25 @@ def main():
         make_fig5('Ed')
     if remake_fig7:
         make_fig7()
+    if remake_fig8:
+        make_fig8()
     if remake_figS1:
-        make_figS1()
+        make_figS1('Ef')
     if remake_figS2:
-        make_figS2('Ef')
-    if remake_figS3:
         make_fig2('LiMnTMO')
-    if remake_figS4:
+    if remake_figS3:
         make_fig3('Ed')
-    if remake_figS5:
+    if remake_figS4:
         make_fig4('Ed')
+    if remake_figS5:
+        make_figS5()
     if remake_table1:
         make_table1('Ef')
     if remake_tableS1:
         make_table1('Ed')
+    if remake_tableS2:
+        make_tableS2()
         
-    make_schematic2()
     return
 
 def tableau_colors():
@@ -326,7 +334,7 @@ def ax_actual_vs_pred(actual, pred, prop, exp='allMP',
     ax = plt.ylim(ylim)
     return ax    
 
-def add_colorbar(fig, label, ticks, 
+def add_colorbar_old(fig, label, ticks, 
                  cmap, vmin, vmax, position, 
                  label_size, tick_size, tick_len, tick_width,
                  orientation='vertical',
@@ -340,6 +348,27 @@ def add_colorbar(fig, label, ticks,
     cb.ax.tick_params(labelsize=tick_size, length=tick_len, width=tick_width)
     if tick_pos:
         cb.ax.yaxis.set_ticks_position(tick_pos)
+    return fig 
+
+def add_colorbar(fig, label, ticks, 
+                 cmap, vmin, vmax, position, 
+                 label_size, tick_size, tick_len, tick_width):
+    import matplotlib as mpl
+    
+    cax = fig.add_axes(position)
+    
+    cmap = getattr(plt.cm, cmap)
+    norm = plt.cm.colors.Normalize(vmin=vmin, vmax=vmax)
+
+    
+    sm = mpl.cm.ScalarMappable(cmap=cmap, norm=norm)
+    cb = fig.colorbar(sm, cax=cax, 
+                       ticks=ticks,
+                       orientation='vertical')
+    cb.set_label(label, fontsize=label_size)
+    cb.set_ticks(ticks)
+    #cb.ax.set_yticklabels([])
+    cb.ax.tick_params(labelsize=tick_size, length=tick_len, width=tick_width)
     return fig 
 
 def ax_hist_classification(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False, show_model=True, show_yticks=False, thresh=0, show_second_ylabel=False, show_second_yticks=False, short_ylabels=False):
@@ -612,7 +641,7 @@ def ax_roc(training_prop, model, show_xlabel=False, show_ylabel=False, leg=False
     
     return ax
 
-def make_figS2(training_prop):
+def make_figS1(training_prop):
     figsize=(9,10)
     fig = plt.figure(figsize=figsize)
     ax1 = plt.subplot(321)
@@ -641,7 +670,7 @@ def make_figS2(training_prop):
     
     plt.show()
     
-    savename = 'FigS2.png' if training_prop == 'Ef' else 'Ed_roc.png'
+    savename = 'FigS1.png' if training_prop == 'Ef' else 'Ed_roc.png'
 
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()     
@@ -1217,7 +1246,7 @@ def make_fig2(experiment):
                  14, 14, 4, 1.5)
     
     plt.show()
-    savename = 'Fig2.png' if experiment == 'allMP' else 'FigS3.png'
+    savename = 'Fig2.png' if experiment == 'allMP' else 'FigS2.png'
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()
     
@@ -1292,7 +1321,7 @@ def make_fig3(training_prop):
                  14, 14, 4, 1.5)
     
     plt.show()
-    savename = 'Fig3.png' if training_prop == 'Ef' else 'FigS4.png'
+    savename = 'Fig3.png' if training_prop == 'Ef' else 'FigS3.png'
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()
     
@@ -1315,7 +1344,7 @@ def make_fig4(training_prop, thresh=0):
     plt.show()
     
     if thresh == 0:
-        savename = 'Fig4.png' if training_prop == 'Ef' else 'FigS5.png'
+        savename = 'Fig4.png' if training_prop == 'Ef' else 'FigS4.png'
     else:
         savename = 'Fig4_%s.png' % str(int(1000*thresh)) if training_prop == 'Ef' else 'FigS5_%s.png' % str(int(1000*thresh))
     fig.savefig(os.path.join(FIG_DIR, savename))
@@ -1413,240 +1442,6 @@ def make_fig7():
     fig.savefig(os.path.join(FIG_DIR, 'Fig7.png'))        
     plt.close()
     
-def make_figS1(ax_it=True):
-    compounds = get_compounds('allMP')
-    x, y = get_actual('Ef', compounds), get_actual('Ed', compounds)
-    if not ax_it:
-        fig = plt.figure()
-        ax = plt.subplot(111)
-    nbins = 85
-    alpha=0.5
-    norm = True
-    xlim = (-4, 1)
-    label_Hf = r'$\Delta$'+r'$\it{H}$'+r'$_{f,MP}$'
-    label_Hd = label_Hf.replace('f', 'd')
-    ax = plt.hist(x, 
-                  color=tableau_colors()['purple'], 
-                  bins=nbins,
-                  alpha=alpha,
-                  density=norm,
-                  label=label_Hf)
-    ax = plt.hist(y, 
-                  color=tableau_colors()['orange'], 
-                  bins=nbins,
-                  alpha=alpha,
-                  density=norm,
-                  label=label_Hd)
-    
-    ax = plt.xlim(xlim)
-    
-    ax = plt.gca().yaxis.set_ticklabels([])
-    ax = plt.ylabel('Norm. frequency')    
-    ax = plt.xlabel(label_Hf+' or '+label_Hd+r'$\/(\frac{eV}{atom})$')     
-    ax = plt.xticks((-4, -3, -2, -1, 0, 1))
-    #ax = plt.legend()
-    ax = plt.text(-2, 0.5, 
-                  label_Hf, 
-                  color=tableau_colors()['purple'],
-                  horizontalalignment='center')
-    ax = plt.text(-0.6, 2, 
-                  label_Hd, 
-                  color=tableau_colors()['orange'],
-                  horizontalalignment='center')
-    if ax_it:
-        return ax
-    plt.show()
-    fig.savefig(os.path.join(FIG_DIR, 'FigS1.png'))
-    plt.close()    
-    
-def make_table1(training_prop):
-    
-    x = PrettyTable()
-    
-    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost']
-    
-    x.field_names = ['']+models
-    
-    row_names = ['candidate compositions',
-                 'stable compounds in MP',
-                 'compounds pred. stable',
-                 '% predicted stable',
-                 'pred. stable and MP stable']    
-    
-    experiment = 'smact'
-    data = {model : get_results(training_prop, experiment, model) for model in models}  
-    
-    row1 = [row_names[0]]+[len(data[m]['compounds']) for m in models]
-    row2 = [row_names[1]]+[len(data[m]['MP_stable']) for m in models]
-    row3 = [row_names[2]]+[len(data[m]['pred_stable']) for m in models]
-    row4 = [row_names[3]]+[np.round(100*len(data[m]['pred_stable'])/len(data[m]['compounds']), 1) for m in models]
-    row5 = [row_names[4]]+[len(set(data[m]['MP_stable']).intersection(set(data[m]['pred_stable']))) for m in models]
-    
-    row5_cmpds = [set(data[m]['MP_stable']).intersection(set(data[m]['pred_stable'])) for m in models]
-    all_pred_stables = [data[m]['pred_stable'] for m in models]
-    all_pred_stables = [j for i in all_pred_stables for j in i]
-    unique_pred_stables = list(set(all_pred_stables))
-    pred_by_all = [c for c in unique_pred_stables if all_pred_stables.count(c) == 6]
-
-    #print('%i different cmpds predicted to be stable' % len(unique_pred_stables))
-    #print('%i cmpds pred by all models to be stable' % len(pred_by_all))
-    rows = [row1, row2, row3, row4, row5]
-    for r in rows:
-        x.add_row(r)
-    
-    name = 'Table1' if training_prop == 'Ef' else 'TableS1'
-    with open(os.path.join(FIG_DIR, name), 'w') as f:
-        f.write(str(x))
-        
-def make_rand_schematic():
-    fig = plt.figure(figsize=(15,  3.5))
-    ax1 = plt.subplot(131)
-    training_prop = 'Ef'
-    prop = 'Ef'
-    experiment = 'allMP'
-    compounds = get_compounds(experiment)
-    model = 'ElFrac'
-    actual, pred = get_actual(training_prop, compounds), get_pred(training_prop, prop, experiment, model, compounds)
-    #mae = get_mae(actual, pred)
-    ax1 = ax_actual_vs_pred(actual, pred, prop,
-                            exp=experiment,
-                            show_xticks=True, show_yticks=True,
-                            show_xlabel=True, show_ylabel=True,
-                            show_mae=False, show_model=False)
-    
-    ax2 = plt.subplot(132)
-    resid = [actual[i] - pred[i] for i in range(len(actual))]
-    # This is  the colormap I'd like to use.
-    #cm = plt.cm.get_cmap(cmap)
-    
-    xlim = (-1, 1)
-    # Plot histogram.
-    norm = mpl.colors.Normalize(vmin=0,vmax=1.)
-    #cmap = 'plasma_r'
-    #cm = plt.cm.get_cmap(cmap)
-
-    N, bins, patches = plt.hist(resid, 
-                                bins=int((xlim[1]-xlim[0])/0.01), 
-                                density=True, 
-                                stacked=True, 
-                                align='mid')
-    
-    norm = mpl.colors.Normalize(0, 1)
-    # set a color for every bar (patch) according 
-    # to bin value  normalized min-max interval
-    for b, patch in zip(bins, patches):
-        color = mpl.cm.plasma_r(norm(abs(b)))
-        patch.set_facecolor(color)
-
-    ax2 = plt.xlabel(r'$\Delta$' + r'$\it{H}$' + r'$_{f,MP}$' + r'$-$'+r'$\Delta$' + r'$\it{H}$' + r'$_{f,pred}$'+' ' + r'$\/(\frac{energy}{atom})$')
-    ax2 = plt.xlim(xlim)
-    ax2 = plt.yticks([], [])
-    ax2 = plt.ylabel('Error distribution, '+r'$\it{P}$')    
-    
-    ax4 = plt.subplot(133)
-    
-    xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
-    xlim = (0, 1)
-    ylim = (-1, 0)
-    yticks = (-1, -0.8, -0.6, -0.4, -0.2, 0)
-    xlabel = r'$x\/in\/A_{1-x}B_x$'
-    ylabel = r'$\Delta$' + r'$\it{H}$' + r'$_{f,rand}$' + r'$\/(\frac{eV}{atom})$'
-    
-    x_stable = [0, 1/3, 0.75, 1]
-    y_stable = [0, -0.8, -0.9, 0]
-    x_unstable = [0.2]
-    y_unstable = [-0.2]
-    
-    x_imag = [1/3, 1]
-    y_imag = [-0.8, 0]
-    
-    colors = tableau_colors()
-    
-    m_size = 8
-    c_stable, mfc_stable, mec_stable = colors['blue'], 'white', colors['blue']
-    m_stable = 'o'
-    lw_stable, ls_stable = 1.5, '-'
-    ax1 = plt.plot(x_stable, y_stable,
-                  color=c_stable,
-                  markerfacecolor=mfc_stable,
-                  markeredgecolor=mec_stable,
-                  marker=m_stable,
-                  lw=lw_stable,
-                  ls=ls_stable,
-                  label='stable',
-                  markersize=m_size)
-
-    c_unstable, mfc_unstable, mec_unstable = colors['red'], 'white', colors['red']
-    m_unstable = 's'
-    lw_unstable, ls_unstable = 0, '-'    
-    ax4 = plt.plot(x_unstable, y_unstable,
-                  color=c_unstable,
-                  markerfacecolor=mfc_unstable,
-                  markeredgecolor=mec_unstable,
-                  marker=m_unstable,
-                  lw=lw_unstable,
-                  ls=ls_unstable,
-                  label='unstable',
-                  markersize=m_size)
-    
-    ax4 = plt.plot(x_imag, y_imag,
-                  color='black',
-                  markerfacecolor=mfc_stable,
-                  markeredgecolor=mec_stable,
-                  marker=m_stable,
-                  lw=1,
-                  ls='--',
-                  label='__nolegend__',
-                  markersize=m_size) 
-    
-    Hd_font = 18
-    ax4 = plt.arrow(1/5, -0.8/(1/3)*0.2, 0, abs(-0.2--0.8/(1/3)*0.2)-0.025,
-                   length_includes_head=True,
-                   head_width=0.01,
-                   head_length=0.02,
-                   zorder=0,
-                   color='black',
-                   ls='solid',
-                   lw=1)
-    ax4 = plt.text(0.21, -0.4, 
-                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,rand}$',
-                  verticalalignment='bottom',
-                  color=c_unstable,
-                  fontsize=Hd_font)
-    
-    ax4 = plt.text(0.74, -0.7, 
-                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,rand}$',
-                  verticalalignment='bottom',
-                  horizontalalignment='right',
-                  color=c_stable,
-                  fontsize=Hd_font)
-    
-    
-    ax4 = plt.arrow(0.75, -0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.005, 0, -0.9-(-0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.03),
-                   length_includes_head=True,
-                   head_width=0.01,
-                   head_length=0.02,
-                   zorder=0,
-                   color='black',
-                   ls='solid',
-                   lw=1)
-    
-    ax4 = plt.legend(loc='lower left')
-    ax4 = plt.xlabel(xlabel)
-    ax4 = plt.ylabel(ylabel)
-    ax4 = plt.xticks(xticks)
-    ax4 = plt.yticks(yticks)
-    ax4 = plt.gca().yaxis.set_ticklabels([])
-
-    ax4 = plt.xlim(xlim)
-    ax4 = plt.ylim(ylim) 
-
-    
-    
-    plt.subplots_adjust(wspace=0.4)
-    
-    fig.savefig(os.path.join(FIG_DIR, 'tmp.png'))
-    
 def get_rand_stats(d):
     Ef_MAE = d['stats']['Ef']['abs']['mean']
     Ed_MAE = d['stats']['Ed']['reg']['abs']['mean']
@@ -1678,16 +1473,12 @@ def process_rand(model):
                             for prop in stats['actual']}
                             
     return stats
-        
     
-    
-    
-def make_schematic2():
+def make_fig8():
 
 
     fig = plt.figure(figsize=(13, 3.7))
     #fig = plt.figure(figsize=(7,7))
-    from matplotlib import gridspec
     
     #make outer gridspec
     gs = gridspec.GridSpec(nrows=1, 
@@ -1877,17 +1668,12 @@ def make_schematic2():
     ax3 = plt.gca().tick_params(axis='y', colors=f1_color)
     ax3 = plt.ylim((0, 1))
 
-    
     ax3 = plt.ylabel(r'$F_1\/score$')
-    
     
     ax3 = plt.text(-9.35, 1.1, 'a', weight='bold')
     ax3 = plt.text(-2.3, 1.1, 'b', weight='bold')
 
-
-    
-    
-    
+    """
     for m in models:
         print('\n')
         print(m)
@@ -1901,10 +1687,114 @@ def make_schematic2():
             else:
                 per_improve = 1 -  stats['summary'][prop]['mean'] / stats['actual'][prop]
             print('\timprovement = %.2f' % (100*per_improve))
-            
-            
+    """
             
     fig.savefig(os.path.join(FIG_DIR, 'Fig8.png'))
+    
+def make_table1(training_prop):
+    
+    x = PrettyTable()
+    
+    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost']
+    
+    x.field_names = ['']+models
+    
+    row_names = ['candidate compositions',
+                 'stable compounds in MP',
+                 'compounds pred. stable',
+                 '% predicted stable',
+                 'pred. stable and MP stable']    
+    
+    experiment = 'smact'
+    data = {model : get_results(training_prop, experiment, model) for model in models}  
+    
+    row1 = [row_names[0]]+[len(data[m]['compounds']) for m in models]
+    row2 = [row_names[1]]+[len(data[m]['MP_stable']) for m in models]
+    row3 = [row_names[2]]+[len(data[m]['pred_stable']) for m in models]
+    row4 = [row_names[3]]+[np.round(100*len(data[m]['pred_stable'])/len(data[m]['compounds']), 1) for m in models]
+    row5 = [row_names[4]]+[len(set(data[m]['MP_stable']).intersection(set(data[m]['pred_stable']))) for m in models]
+    
+    row5_cmpds = [set(data[m]['MP_stable']).intersection(set(data[m]['pred_stable'])) for m in models]
+    all_pred_stables = [data[m]['pred_stable'] for m in models]
+    all_pred_stables = [j for i in all_pred_stables for j in i]
+    unique_pred_stables = list(set(all_pred_stables))
+    pred_by_all = [c for c in unique_pred_stables if all_pred_stables.count(c) == 6]
+
+    print('%i different cmpds predicted to be stable' % len(unique_pred_stables))
+    print('%i cmpds pred by all models to be stable' % len(pred_by_all))
+    rows = [row1, row2, row3, row4, row5]
+    for r in rows:
+        x.add_row(r)
+    
+    name = 'Table1' if training_prop == 'Ef' else 'TableS1'
+    with open(os.path.join(FIG_DIR, name), 'w') as f:
+        f.write(str(x))
+
+def make_tableS2():
+    models = ['ElFrac', 'Meredig', 'Magpie', 'ElemNet']
+    #models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost']
+    data = {model : read_json(os.path.join(this_dir, 'ml_data', 'Ed', 'classifier', model, 'ml_results.json')) for model in models}
+    data = {model : data[model]['stats']['Ed']['cl']['0']['scores'] for model in models}
+    x = PrettyTable()
+    
+    header = ['', 'Acc', 'F1', 'FPR']
+    x.field_names = header
+    for m in models:
+        row = [m] + ['%.3f' % np.round(data[m][prop], 3) for prop in ['accuracy',
+                                                                     'f1',
+                                                                     'fpr']]        
+        x.add_row(row)
         
+    name = 'TableS2' 
+    with open(os.path.join(FIG_DIR, name), 'w') as f:
+        f.write(str(x))
+    print(x)
+    
+def ax_learning(ax, model, color, marker):
+    training_amts = [0.001, 0.01, 0.1, 0.2, 0.5, 0.8]
+    ds = [read_json(os.path.join(this_dir, 'ml_data', 'Ef', 'learning', model, '_'.join([str(training_amt), 'ml', 'results.json']))) for training_amt in training_amts]
+    d = dict(zip(training_amts, ds))
+    mp = hullout()
+    x = [training_amt*len(mp) for training_amt in training_amts]
+    y = [d[t]['mae']['mean'] for t in d]
+    yerr = [d[t]['mae']['std'] for t in d]
+    ax = plt.errorbar(x, y, yerr=yerr, 
+                      label=model, color=color, fmt='-'+marker, 
+                      markerfacecolor='None', 
+                      elinewidth=1, capsize=3, capthick=1)
+    return ax
+    
+def make_figS5():
+    fig = plt.figure()
+    ax = plt.subplot(111)
+    ax.set_xscale('log')
+   # ax.set_yscale('log')
+    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost']
+    colors = [tableau_colors()['blue'],
+              tableau_colors()['orange'],
+              tableau_colors()['green'],
+              tableau_colors()['pink'],
+              tableau_colors()['turquoise'],
+              tableau_colors()['brown']]
+    markers = ['o', 's', 'D',
+               '^', '<', '>']
+    colors = dict(zip(models, colors))
+    markers = dict(zip(models, markers))
+    models = ['ElFrac', 'Meredig', 'Magpie', 'ElemNet']
+    for model in models:
+        ax = ax_learning(ax, model, colors[model], markers[model])
+    ax = plt.legend(ncol=2)
+    ax = plt.xlabel('No. training examples')
+    label_dH = r'$\Delta$'+r'$\it{H}$'
+    label_units = r'$\/(\frac{eV}{atom})$'
+   # ax = plt.ylabel(r'$|$' + label_dH + r'$_{f,MP}$' + r'$-$' + label_dH + r'$_{f,pred}|$' + label_units)
+    ax = plt.ylabel(r'$MAE$'+label_units)
+    ax = plt.xticks((1e2, 1e3, 1e4, 1e5))
+    ax = plt.xlim((7e1, 1e5))
+    ax = plt.yticks((0, 0.2, 0.4, 0.6, 0.8, 1.0))
+    ax = plt.ylim((0, 1))
+
+    fig.savefig(os.path.join(FIG_DIR, 'FigS5.png'))
+
 if __name__ == '__main__':
     main()

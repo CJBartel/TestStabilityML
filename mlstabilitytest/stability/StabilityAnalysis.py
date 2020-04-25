@@ -546,10 +546,16 @@ class EdAnalysis(object):
         """
         ml_in = self.input_data
         compounds = self.compounds
-        return {c : {'Ef' : None,
-                     'Ed' : -1 if ml_in[c] >= 0.5 else 1,
-                     'stability' : True if ml_in[c] >= 0.5 else False,
-                     'rxn' : None} for c in compounds}
+        if self.experiment == 'classifier':
+            return {c : {'Ef' : None,
+                         'Ed' : -1 if ml_in[c] >= 0.5 else 1,
+                         'stability' : True if ml_in[c] >= 0.5 else False,
+                         'rxn' : None} for c in compounds}
+        else:
+            return {c : {'Ef' : None,
+                         'Ed' : ml_in[c],
+                         'stasbility' : True if ml_in[c] <= 0 else False,
+                         'rxn' : None} for c in compounds}
         
     def results(self, remake=False):
         """

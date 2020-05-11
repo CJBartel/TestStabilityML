@@ -22,7 +22,7 @@ FIG_DIR = os.path.join(this_dir, 'figures')
 def main():
     set_rc_params() 
     
-    regen_all_figures = True
+    regen_all_figures = False
     
     remake_fig1 = False
     remake_fig2 = False

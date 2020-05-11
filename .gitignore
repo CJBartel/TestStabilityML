@@ -27,3 +27,4 @@ mlstabilitytest/apriori_stability.py
 mlstabilitytest/data/
 mlstabilitytest/training/learning/
 mlstabilitytest/ml_data/Ef/allMP/*/tmp*.json
+mlstabilitytest/analyze_learning.py

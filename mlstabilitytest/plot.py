@@ -22,14 +22,14 @@ FIG_DIR = os.path.join(this_dir, 'figures')
 def main():
     set_rc_params() 
     
-    regen_all_figures = False
+    regen_all_figures = True
     
     remake_fig1 = False
     remake_fig2 = False
     remake_fig3 = False
     remake_fig4 = False
     remake_fig5 = False
-    remake_table1 = True
+    remake_table1 = False
     remake_fig6 = False
     remake_fig7 = False
     remake_fig8 = False
@@ -50,6 +50,7 @@ def main():
         remake_table1 = True
         remake_fig6 = True
         remake_fig7 = True
+        remke_fig8 = True
         remake_figS1 = True
         remake_figS2 = True
         remake_figS3 = True
@@ -1493,16 +1494,11 @@ def make_fig8():
     
     xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
     xlim = (0, 1)
-    ylim = (-1.1, 0)
-    yticks = (-1, -0.8, -0.6, -0.4, -0.2, 0)
+    ylim = (-1.2, 0)
+    yticks = (-1.2, -1, -0.8, -0.6, -0.4, -0.2, 0)
     xlabel = r'$x\/in\/A_{1-x}B_x$'
     ylabel = r'$\Delta$' + r'$\it{H}$' + r'$_{f}$' + r'$\/(\frac{eV}{atom})$'
-    
-    x = [0, 1/3, 0.75, 1]
-    y_real = [0, -0.8, -0.9, 0]
-    delta = 0.15
-    y_rand = [0, y_real[1]-1.5*delta,  y_real[2]+0.5*delta, 0]
-    y_cancel = [0, y_real[1]+delta,  y_real[2]+delta, 0]
+
     
     colors = tableau_colors()
     
@@ -1510,8 +1506,24 @@ def make_fig8():
     c_real, mfc_real, mec_real = colors['blue'], 'white', colors['blue']
     c_rand, mfc_rand, mec_rand = colors['purple'], 'white', colors['purple']
     c_cancel, mfc_cancel, mec_cancel = colors['green'], 'white', colors['green']
+    
+    delta = 0.2
 
-    m_real, m_rand, m_cancel = 'o', 'o', 'o'
+    x_un = 0.5
+    y_real_un = -0.75
+    y_rand_un = y_real_un-1*delta
+    y_cancel_un = y_real_un + delta
+    
+    x = [0, 1/3, 0.75, 1]
+    y_real = [0, -0.8, -0.9, 0]
+    y_rand = [0, y_real[1]-1.5*delta,  y_real[2]+0.5*delta, 0]
+    y_cancel = [0, y_real[1]+delta,  y_real[2]+delta, 0]
+    
+    
+    x_rand_stable = [0, 1/3,  0.5, 0.75, 1]
+    y_rand_stable = [0, y_real[1]-1.5*delta,  y_rand_un-0.1, y_real[2]+0.5*delta, 0]
+    
+    m_real, m_rand, m_cancel, m_un = 'o', 'o', 'o', 's'
     ls_real, ls_rand, ls_cancel = '-', '--', '-.'
     lw_stable, ls_stable = 1.5, '-'
     ax1 = plt.plot(x, y_real,
@@ -1521,9 +1533,31 @@ def make_fig8():
                   marker=m_real,
                   lw=lw_stable,
                   ls=ls_real,
-                  label='ground truth',
+                  label='__nolegend__',
                   markersize=m_size,
                   zorder=100)
+    ax1 = plt.plot(x_un, y_real_un,
+                  color=c_real,
+                  markerfacecolor=mfc_real,
+                  markeredgecolor=mec_real,
+                  marker=m_un,
+                  lw=lw_stable,
+                  ls=ls_real,
+                  label='__nolegend__',
+                  markersize=m_size,
+                  zorder=100)  
+    
+    
+    ax1 = plt.plot(x_un, y_rand_un,
+                  color=c_rand,
+                  markerfacecolor=mfc_rand,
+                  markeredgecolor=mec_rand,
+                  marker=m_un,
+                  lw=lw_stable,
+                  ls=ls_rand,
+                  label='__nolegend__',
+                  markersize=m_size)
+
     
     ax1 = plt.plot(x, y_rand,
                   color=c_rand,
@@ -1532,7 +1566,7 @@ def make_fig8():
                   marker=m_rand,
                   lw=lw_stable,
                   ls=ls_rand,
-                  label='random',
+                  label='__nolegend__',
                   markersize=m_size)
     
     ax1 = plt.plot(x, y_cancel,
@@ -1542,24 +1576,54 @@ def make_fig8():
                   marker=m_cancel,
                   lw=lw_stable,
                   ls=ls_cancel,
-                  label='systematic',
+                  label='__nolegend__',
                   markersize=m_size)
+    
+   
+    ax1 = plt.plot(x_un, y_cancel_un,
+                  color=c_cancel,
+                  markerfacecolor=mfc_cancel,
+                  markeredgecolor=mec_cancel,
+                  marker=m_un,
+                  lw=lw_stable,
+                  ls=ls_cancel,
+                  label='__nolegend__',
+                  markersize=m_size)
+    
+    ax1 = plt.plot(-1, 1,
+                  color=tableau_colors()['gray'],
+                  markerfacecolor=mfc_cancel,
+                  markeredgecolor=tableau_colors()['gray'],
+                  marker=m_cancel,
+                  lw=lw_stable,
+                  ls=ls_cancel,
+                  label='stable',
+                  markersize=m_size) 
+    
+    ax1 = plt.scatter(-1, 1,
+                  color='white',
+                  edgecolor=tableau_colors()['gray'],
+                  marker=m_un,
+                  lw=1,
+                  ls='-',
+                  label='unstable',
+                  s=70) 
     
     ax1 = plt.xticks(xticks)
     ax1 = plt.yticks(yticks, [])
     
     label_font = 18
-    ax1 = plt.text(0.75, -1.02, 'ground-truth',
+    ax1 = plt.text(0.75, -0.92, 'ground\ntruth',
                    color=c_real,
                    fontsize=label_font,
                    horizontalalignment='center',
-                   verticalalignment='bottom')
-    ax1 = plt.text(0.16, -1.09, 'random\nerror',
+                   verticalalignment='top')
+    ax1 = plt.text(0.15, -1.13, 'random\nerror',
                    color=c_rand,
                    fontsize=label_font,
                    horizontalalignment='center',
                    verticalalignment='bottom')
-    ax1 = plt.text(0.5, -0.65, 'systematic\nerror',
+    ax1 = plt.text(0.41, -0.54, 'systematic\nerror',
                    color=c_cancel,
                    fontsize=label_font,
                    horizontalalignment='center',
@@ -1572,6 +1636,8 @@ def make_fig8():
    
     ax1 = plt.ylim(ylim)
     ax1 = plt.xlim(xlim)    
+    
+    ax1 = plt.legend(loc='upper center')
     
     ax2 = fig.add_subplot(gs[0, 1])
     
@@ -1731,7 +1797,7 @@ def make_table1(training_prop):
         f.write(str(x))
 
 def make_tableS2():
-    models = ['ElFrac', 'Meredig', 'Magpie', 'ElemNet']
+    models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet']
     #models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet', 'Roost']
     data = {model : read_json(os.path.join(this_dir, 'ml_data', 'Ed', 'classifier', model, 'ml_results.json')) for model in models}
     data = {model : data[model]['stats']['Ed']['cl']['0']['scores'] for model in models}
@@ -1780,7 +1846,7 @@ def make_figS5():
                '^', '<', '>']
     colors = dict(zip(models, colors))
     markers = dict(zip(models, markers))
-    models = ['ElFrac', 'Meredig', 'Magpie', 'ElemNet']
+    #models = ['ElFrac', 'Meredig', 'Magpie', 'AutoMat', 'ElemNet']
     for model in models:
         ax = ax_learning(ax, model, colors[model], markers[model])
     ax = plt.legend(ncol=2)

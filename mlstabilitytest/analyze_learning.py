@@ -14,7 +14,7 @@ import numpy as np
 
 data_dir = '/Users/chrisbartel/Downloads/mp_fraction'
 
-models = ['ElFrac', 'Meredig', 'Magpie', 'ElemNet']
+models = ['ElFrac', 'Meredig', 'Magpie', 'ElemNet', 'AutoMat', 'Roost']
 
 training_amts = [0.001, 0.01, 0.1, 0.2, 0.5, 0.8]
 
@@ -57,6 +57,9 @@ def get_model_summary(model, training_amt, remake=False):
         
         actual = [mp[k]['Ef'] for k in formulas]
         pred = [data[k] for k in formulas]
+        
+        if (split == 0) and (model == 'ElemNet'):
+            return formulas, actual, pred
         
         ss = StabilityStats(actual, pred)
         
@@ -103,6 +106,10 @@ def get_compoundwise_model_summary(model, training_amt):
 """
  
 def main():
+    """
+    out = get_model_summary('ElemNet', 0.01, True)
+    return out
+    """
     remake = True
     out1 = {model : {training_amt : get_model_summary(model, training_amt, True) 
                     for training_amt in training_amts}

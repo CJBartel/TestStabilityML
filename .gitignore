@@ -30,3 +30,4 @@ mlstabilitytest/ml_data/Ef/allMP/*/tmp*.json
 mlstabilitytest/analyze_learning.py
 mlstabilitytest/ananlyze_classifiers.py
 mlstabilitytest/old/
+mlstabilitytest/figures/*pdf

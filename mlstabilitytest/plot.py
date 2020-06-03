@@ -18,11 +18,16 @@ from matplotlib import gridspec
 
 this_dir, this_filename = os.path.split(__file__)
 FIG_DIR = os.path.join(this_dir, 'figures')
+EXT = '.png'
 
 def main():
     set_rc_params() 
+    if EXT == '.pdf':
+        mpl.rcParams['figure.dpi'] = 600.0
+    else:
+        mpl.rcParams['figure.dpi'] = 300.0
     
-    regen_all_figures = False
+    regen_all_figures = True
     
     remake_fig1 = False
     remake_fig2 = False
@@ -50,7 +55,7 @@ def main():
         remake_table1 = True
         remake_fig6 = True
         remake_fig7 = True
-        remke_fig8 = True
+        remake_fig8 = True
         remake_figS1 = True
         remake_figS2 = True
         remake_figS3 = True
@@ -671,7 +676,7 @@ def make_figS1(training_prop):
     
     plt.show()
     
-    savename = 'FigS1.png' if training_prop == 'Ef' else 'Ed_roc.png'
+    savename = 'FigS1%s' % EXT if training_prop == 'Ef' else 'Ed_roc%s' % EXT
 
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()     
@@ -1004,176 +1009,7 @@ def make_fig1():
     
     
     #plt.subplots_adjust(wspace=0.2)
-    fig.savefig(os.path.join(FIG_DIR, 'Fig1.png'))
-    
-
-    
-def make_fig1_old():
-    fig = plt.figure(figsize=(12, 3.5))
-    ax1 = plt.subplot(121)
-    xticks = (0, 0.2, 0.4, 0.6, 0.8, 1)
-    xlim = (0, 1)
-    ylim = (-1, 0)
-    yticks = (-1, -0.8, -0.6, -0.4, -0.2, 0)
-    xlabel = r'$x\/in\/A_{1-x}B_x$'
-    ylabel = r'$\Delta$' + r'$\it{H}$' + r'$_{f}$' + r'$\/(\frac{energy}{atom})$'
-    
-    x_stable = [0, 1/3, 0.75, 1]
-    y_stable = [0, -0.8, -0.9, 0]
-    x_unstable = [0.2]
-    y_unstable = [-0.2]
-    
-    x_imag = [1/3, 1]
-    y_imag = [-0.8, 0]
-    
-    colors = tableau_colors()
-    
-    m_size = 8
-    c_stable, mfc_stable, mec_stable = colors['blue'], 'white', colors['blue']
-    m_stable = 'o'
-    lw_stable, ls_stable = 1.5, '-'
-    ax1 = plt.plot(x_stable, y_stable,
-                  color=c_stable,
-                  markerfacecolor=mfc_stable,
-                  markeredgecolor=mec_stable,
-                  marker=m_stable,
-                  lw=lw_stable,
-                  ls=ls_stable,
-                  label='stable',
-                  markersize=m_size)
-
-    c_unstable, mfc_unstable, mec_unstable = colors['red'], 'white', colors['red']
-    m_unstable = 's'
-    lw_unstable, ls_unstable = 0, '-'    
-    ax1 = plt.plot(x_unstable, y_unstable,
-                  color=c_unstable,
-                  markerfacecolor=mfc_unstable,
-                  markeredgecolor=mec_unstable,
-                  marker=m_unstable,
-                  lw=lw_unstable,
-                  ls=ls_unstable,
-                  label='unstable',
-                  markersize=m_size)
-    
-    ax1 = plt.plot(x_imag, y_imag,
-                  color='black',
-                  markerfacecolor=mfc_stable,
-                  markeredgecolor=mec_stable,
-                  marker=m_stable,
-                  lw=1,
-                  ls='--',
-                  label='__nolegend__',
-                  markersize=m_size) 
-    
-    Hd_font = 18
-    ax1 = plt.arrow(1/5, -0.8/(1/3)*0.2, 0, abs(-0.2--0.8/(1/3)*0.2)-0.025,
-                   length_includes_head=True,
-                   head_width=0.01,
-                   head_length=0.02,
-                   zorder=0,
-                   color='black',
-                   ls='solid',
-                   lw=1)
-    ax1 = plt.text(0.21, -0.4, 
-                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,A_4B}$',
-                  verticalalignment='bottom',
-                  color=c_unstable,
-                  fontsize=Hd_font)
-    ax1 = plt.text(0.74, -0.7, 
-                  r'$\Delta$'+r'$\it{H}$'+r'$_{d,AB_3}$',
-                  verticalalignment='bottom',
-                  horizontalalignment='right',
-                  color=c_stable,
-                  fontsize=Hd_font)
-    
-    ax1 = plt.arrow(0.75, -0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.005, 0, -0.9-(-0.8/(-2/3)*0.75-(1/3)*(0.8/(2/3))-0.8-0.03),
-                   length_includes_head=True,
-                   head_width=0.01,
-                   head_length=0.02,
-                   zorder=0,
-                   color='black',
-                   ls='solid',
-                   lw=1)
-    
-    ax1 = plt.legend(loc='lower left')
-    ax1 = plt.xlabel(xlabel)
-    ax1 = plt.ylabel(ylabel)
-    ax1 = plt.xticks(xticks)
-    ax1 = plt.yticks(yticks)
-    ax1 = plt.gca().yaxis.set_ticklabels([])
-
-    ax1 = plt.xlim(xlim)
-    ax1 = plt.ylim(ylim)
-    
-    ax1 = plt.text(0, 0.05, 'A', horizontalalignment='center')
-    ax1 = plt.text(1, 0.05, 'B', horizontalalignment='center')    
-
-    ax2 = plt.subplot(132)
-    
-    d = hullout()
-    x, y = [d[c]['Ef'] for c in d], [d[c]['Ed'] for c in d]
-    alpha = 0.1
-    marker = 'o'
-    lw = 0
-    s = 10
-    stable_c = tableau_colors()['blue']
-    unstable_c = tableau_colors()['red']
-    colors = [stable_c if y[i] < 0 else unstable_c for i in range(len(y))]
-    edgecolors = None
-    vmin, vmax, cmap, cmap_values = False, False, False, False
-    xticks = (True, [-5, -4, -3, -2, -1, 0, 1, 2])
-    yticks = (True, [-1, -0.5, 0, 0.5, 1])
-    xlabel = r'$\Delta$' + r'$\it{H}$' + r'$_f$' + r'$\/(\frac{eV}{atom})$'
-    ylabel = xlabel.replace('_f', '_d')
-    xlim = (-5, 1)
-    ylim = (-1, 1)
-    diag = False
-    ax2 = ax_generic_scatter(x, y, 
-                            alpha=alpha,
-                            marker=marker,
-                            lw=lw,
-                            s=s,
-                            colors=colors,
-                            edgecolors=edgecolors,
-                            vmin=vmin,
-                            vmax=vmax,
-                            cmap=cmap,
-                            cmap_values=cmap_values,
-                            xticks=xticks,
-                            yticks=yticks,
-                            xlabel=xlabel,
-                            ylabel=ylabel,
-                            xlim=xlim,
-                            ylim=ylim,
-                            diag=diag)
-    ax2 = plt.plot(xlim, [0, 0], lw=1, ls='--', color='black')
-    
-    ax2 = plt.text(-4.9, -0.9, 'stable', color=stable_c)
-    ax2 = plt.text(-4.9, 0.9, 'unstable', color=unstable_c, verticalalignment='top')
-    
-    indices = [i for i in range(len(x)) if x[i] != y[i]]
-    x, y = [x[i] for i in indices], [y[i] for i in indices]
-    m, b, r, p, s = linregress(x, y)
-    
-    fake_x = np.linspace(xlim[0], xlim[1], 1000)
-    fake_y = [m*v+b for v in fake_x]
-    ax2 = plt.plot(fake_x, fake_y, lw=1, ls='-', color=tableau_colors()['gray'])
-    ax2 = plt.text(-4.95, -0.12, r'$R^2\/=\/%.2f$' % r**2, color=tableau_colors()['gray'], 
-                  horizontalalignment='left', verticalalignment='top', fontsize=18)
-
-    
-    """
-    ax3 = plt.subplot(133)
-    ax3 = make_figS1(True)
-    """
-
-
-    #ax3 = plt.text(-15, 1.25, 'a', weight='bold')
-    #ax3 = plt.text(-7, 1.25, 'b', weight='bold')
-    #ax2 = plt.subplots_adjust(wspace=0.45)
-    fig.savefig(os.path.join(FIG_DIR, 'Fig1.png'))
-    plt.show()
-    plt.close()
+    fig.savefig(os.path.join(FIG_DIR, 'Fig1%s' % EXT))
     
 def make_fig2(experiment):
     training_prop = 'Ef'
@@ -1247,7 +1083,7 @@ def make_fig2(experiment):
                  14, 14, 4, 1.5)
     
     plt.show()
-    savename = 'Fig2.png' if experiment == 'allMP' else 'FigS2.png'
+    savename = 'Fig2%s' % EXT if experiment == 'allMP' else 'FigS2%s' % EXT
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()
     
@@ -1322,7 +1158,7 @@ def make_fig3(training_prop):
                  14, 14, 4, 1.5)
     
     plt.show()
-    savename = 'Fig3.png' if training_prop == 'Ef' else 'FigS3.png'
+    savename = 'Fig3%s' % EXT if training_prop == 'Ef' else 'FigS3%s' % EXT
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()
     
@@ -1345,9 +1181,9 @@ def make_fig4(training_prop, thresh=0):
     plt.show()
     
     if thresh == 0:
-        savename = 'Fig4.png' if training_prop == 'Ef' else 'FigS4.png'
+        savename = 'Fig4%s' % EXT if training_prop == 'Ef' else 'FigS4%s' % EXT
     else:
-        savename = 'Fig4_%s.png' % str(int(1000*thresh)) if training_prop == 'Ef' else 'FigS5_%s.png' % str(int(1000*thresh))
+        savename = 'Fig4_%s%s' % (str(int(1000*thresh)), EXT) if training_prop == 'Ef' else 'FigS5_%s%s' % (str(int(1000*thresh)), EXT)
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()   
     
@@ -1378,9 +1214,9 @@ def make_fig5(training_prop, thresh=0):
     
     plt.show()
     if thresh == 0:
-        savename = 'Fig5.png' if training_prop == 'Ef' else 'Fig6.png'
+        savename = 'Fig5%s' % EXT if training_prop == 'Ef' else 'Fig6%s' % EXT
     else:
-        savename = 'Fig5_%s.png' % str(int(1000*thresh)) if training_prop == 'Ef' else 'Fig6_%s.png' % str(int(1000*thresh))
+        savename = 'Fig5_%s%s' % (str(int(1000*thresh)), EXT) if training_prop == 'Ef' else 'Fig6_%s%s' % (str(int(1000*thresh)), EXT)
     fig.savefig(os.path.join(FIG_DIR, savename))
     plt.close()   
     
@@ -1440,7 +1276,7 @@ def make_fig7():
     plt.subplots_adjust(hspace=0.55, wspace=0.87)
     plt.show()
     
-    fig.savefig(os.path.join(FIG_DIR, 'Fig7.png'))        
+    fig.savefig(os.path.join(FIG_DIR, 'Fig7%s' % EXT))        
     plt.close()
     
 def get_rand_stats(d):
@@ -1755,7 +1591,7 @@ def make_fig8():
             print('\timprovement = %.2f' % (100*per_improve))
     """
             
-    fig.savefig(os.path.join(FIG_DIR, 'Fig8.png'))
+    fig.savefig(os.path.join(FIG_DIR, 'Fig8%s' % EXT))
     
 def make_table1(training_prop):
     
@@ -1860,7 +1696,7 @@ def make_figS5():
     ax = plt.yticks((0, 0.2, 0.4, 0.6, 0.8, 1.0))
     ax = plt.ylim((0, 1))
 
-    fig.savefig(os.path.join(FIG_DIR, 'FigS5.png'))
+    fig.savefig(os.path.join(FIG_DIR, 'FigS5%s' % EXT))
 
 if __name__ == '__main__':
     main()

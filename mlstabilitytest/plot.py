@@ -18,14 +18,10 @@ from matplotlib import gridspec
 
 this_dir, this_filename = os.path.split(__file__)
 FIG_DIR = os.path.join(this_dir, 'figures')
-EXT = '.png'
+EXT = '.pdf'
 
 def main():
     set_rc_params() 
-    if EXT == '.pdf':
-        mpl.rcParams['figure.dpi'] = 600.0
-    else:
-        mpl.rcParams['figure.dpi'] = 300.0
     
     regen_all_figures = True
     
@@ -210,7 +206,8 @@ def ax_generic_scatter(x, y,
                          alpha=alpha, 
                          marker=marker, 
                          lw=lw, 
-                         s=s)
+                         s=s,
+                         rasterized=True)
     else:
         if isinstance(colors, list):
             ax = plt.scatter(x, y, 
@@ -1004,6 +1001,7 @@ def make_fig1():
     ax5 = plt.text(-15, 0.7, 'a', weight='bold')
     ax5 = plt.text(-7, 0.7, 'b', weight='bold')
     
+
     
     plt.show()
     

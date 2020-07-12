@@ -2,13 +2,13 @@
 
 mlstabilitytest is a package that facilitates testing machine learning models for formation energy on stability predictions.
 
-This package was created in conjunction with [this manuscript](https://arxiv.org/abs/2001.10591).
+This package was created in conjunction with [this manuscript](https://www.nature.com/articles/s41524-020-00362-y).
 
 If you use this package, please cite
 ```
 Bartel, C., Trewartha, A., Wang, Q., Dunn, A., Jain, A., Ceder, G., 
 A critical examination of compound stability predictions from machine-learned formation energies, 
-arXiv:2001.10591
+npj Computational Materials 6, 97 (2020)
 ```
 
 The source code for this repository is available at https://github.com/CJBartel/TestStabilityML.
